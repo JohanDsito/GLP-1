@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
+import { useAdminStore } from '../entities/admin/admin-store';
 import { useAuthStore } from '../entities/auth/auth-store';
 import { useSubscriptionStore } from '../entities/subscription/subscription-store';
 import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
@@ -82,6 +83,20 @@ export function RequireLanguageSelection({ children }: PropsWithChildren) {
 
   if (!selectedLanguage) {
     return <Navigate to="/select-language" replace />;
+  }
+
+  return children;
+}
+
+export function RequireAdmin({ children }: PropsWithChildren) {
+  const adminStatus = useAdminStore((state) => state.status);
+
+  if (adminStatus === 'loading') {
+    return <LoadingGate />;
+  }
+
+  if (adminStatus !== 'admin') {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;

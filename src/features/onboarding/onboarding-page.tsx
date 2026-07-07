@@ -1,31 +1,26 @@
-import { ChevronRight, HeartPulse, Languages, Sparkles, Stethoscope } from 'lucide-react';
+import { CalendarClock, ChevronRight, HeartPulse, Languages, Sparkles, Stethoscope } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../entities/auth/auth-store';
+import { getReferenceDoseSteps } from '../../entities/medication/reference-dose-table';
 import { deriveTreatmentProfile } from '../../entities/treatment-profile/derive-treatment-profile';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
-import type {
-    AppLanguage,
-    MedicationName,
-    OnboardingAnswers,
-    SymptomProfile,
-    TreatmentGoal,
-    TreatmentProfile,
-    TreatmentStage,
-} from '../../entities/treatment-profile/types';
+import type { OnboardingAnswers } from '../../entities/treatment-profile/types';
 import { i18n } from '../../i18n';
 import { saveTreatmentProfile } from '../../lib/supabase/treatment-profile';
+import { ReminderSettings } from '../settings/reminder-settings';
 
-type QuestionKey = 'stage' | 'symptomProfile' | 'medication' | 'goal' | 'language';
+type ScalarQuestionKey = 'stage' | 'symptomProfile' | 'timeOnTreatment' | 'medication' | 'goal' | 'language';
+type QuestionKey = ScalarQuestionKey | 'symptomCodes';
+type FreeTextKey = 'primarySymptomOtherText' | 'medicationOtherText';
+type ExtraTextKey = 'medicationDoseText';
 
-type Option<T extends string> = {
-  value: T;
+type Option = {
+  value: string;
   title: string;
   copy: string;
 };
-
-type OnboardingAnswerValue = OnboardingAnswers[QuestionKey];
 
 type QuestionConfig = {
   key: QuestionKey;
@@ -33,7 +28,11 @@ type QuestionConfig = {
   title: string;
   copy: string;
   icon: typeof Stethoscope;
-  options: Array<Option<OnboardingAnswerValue>>;
+  options: Array<Option>;
+  multiSelect?: boolean;
+  freeTextOnValue?: string;
+  freeTextAnswerKey?: FreeTextKey;
+  extraTextField?: { key: ExtraTextKey; labelKey: string; placeholderKey: string; helpKey: string };
 };
 
 const defaultAnswers: OnboardingAnswers = {
@@ -42,6 +41,8 @@ const defaultAnswers: OnboardingAnswers = {
   medication: 'semaglutide',
   goal: 'avoid_side_effects',
   language: 'en',
+  timeOnTreatment: 'lt_1_week',
+  symptomCodes: ['none'],
 };
 
 function getQuestions(t: (key: string, options?: Record<string, unknown>) => string): Array<QuestionConfig> {
@@ -61,6 +62,21 @@ function getQuestions(t: (key: string, options?: Record<string, unknown>) => str
       ],
     },
     {
+      key: 'timeOnTreatment',
+      eyebrow: t('onboarding.timeStep'),
+      title: t('onboarding.questions.timeOnTreatment.title'),
+      copy: t('onboarding.questions.timeOnTreatment.copy'),
+      icon: CalendarClock,
+      options: [
+        { value: 'researching', title: t('onboarding.questions.timeOnTreatment.options.researching.title'), copy: t('onboarding.questions.timeOnTreatment.options.researching.copy') },
+        { value: 'lt_1_week', title: t('onboarding.questions.timeOnTreatment.options.lt_1_week.title'), copy: t('onboarding.questions.timeOnTreatment.options.lt_1_week.copy') },
+        { value: 'wk_1_4', title: t('onboarding.questions.timeOnTreatment.options.wk_1_4.title'), copy: t('onboarding.questions.timeOnTreatment.options.wk_1_4.copy') },
+        { value: 'mo_1_3', title: t('onboarding.questions.timeOnTreatment.options.mo_1_3.title'), copy: t('onboarding.questions.timeOnTreatment.options.mo_1_3.copy') },
+        { value: 'mo_3_6', title: t('onboarding.questions.timeOnTreatment.options.mo_3_6.title'), copy: t('onboarding.questions.timeOnTreatment.options.mo_3_6.copy') },
+        { value: 'mo_6_plus', title: t('onboarding.questions.timeOnTreatment.options.mo_6_plus.title'), copy: t('onboarding.questions.timeOnTreatment.options.mo_6_plus.copy') },
+      ],
+    },
+    {
       key: 'symptomProfile',
       eyebrow: t('onboarding.symptoms'),
       title: t('onboarding.questions.symptomProfile.title'),
@@ -74,15 +90,43 @@ function getQuestions(t: (key: string, options?: Record<string, unknown>) => str
       ],
     },
     {
+      key: 'symptomCodes',
+      eyebrow: t('onboarding.primarySymptomStep'),
+      title: t('onboarding.questions.primarySymptom.title'),
+      copy: t('onboarding.questions.primarySymptom.copy'),
+      icon: HeartPulse,
+      multiSelect: true,
+      freeTextOnValue: 'other',
+      freeTextAnswerKey: 'primarySymptomOtherText',
+      options: [
+        { value: 'none', title: t('onboarding.questions.primarySymptom.options.none.title'), copy: t('onboarding.questions.primarySymptom.options.none.copy') },
+        { value: 'nausea', title: t('onboarding.questions.primarySymptom.options.nausea.title'), copy: t('onboarding.questions.primarySymptom.options.nausea.copy') },
+        { value: 'fatigue', title: t('onboarding.questions.primarySymptom.options.fatigue.title'), copy: t('onboarding.questions.primarySymptom.options.fatigue.copy') },
+        { value: 'hairLoss', title: t('onboarding.questions.primarySymptom.options.hairLoss.title'), copy: t('onboarding.questions.primarySymptom.options.hairLoss.copy') },
+        { value: 'constipation', title: t('onboarding.questions.primarySymptom.options.constipation.title'), copy: t('onboarding.questions.primarySymptom.options.constipation.copy') },
+        { value: 'moodSwings', title: t('onboarding.questions.primarySymptom.options.moodSwings.title'), copy: t('onboarding.questions.primarySymptom.options.moodSwings.copy') },
+        { value: 'other', title: t('onboarding.otherOptionTitle'), copy: t('onboarding.otherOptionCopy') },
+      ],
+    },
+    {
       key: 'medication',
       eyebrow: t('onboarding.medication'),
       title: t('onboarding.questions.medication.title'),
       copy: t('onboarding.questions.medication.copy'),
       icon: Sparkles,
+      freeTextOnValue: 'other',
+      freeTextAnswerKey: 'medicationOtherText',
+      extraTextField: {
+        key: 'medicationDoseText',
+        labelKey: 'onboarding.doseLabel',
+        placeholderKey: 'onboarding.dosePlaceholder',
+        helpKey: 'onboarding.doseHelp',
+      },
       options: [
         { value: 'semaglutide', title: t('onboarding.questions.medication.options.semaglutide.title'), copy: t('onboarding.questions.medication.options.semaglutide.copy') },
         { value: 'tirzepatide', title: t('onboarding.questions.medication.options.tirzepatide.title'), copy: t('onboarding.questions.medication.options.tirzepatide.copy') },
         { value: 'liraglutide', title: t('onboarding.questions.medication.options.liraglutide.title'), copy: t('onboarding.questions.medication.options.liraglutide.copy') },
+        { value: 'other', title: t('onboarding.otherOptionTitle'), copy: t('onboarding.otherOptionCopy') },
         { value: 'unknown', title: t('onboarding.questions.medication.options.unknown.title'), copy: t('onboarding.questions.medication.options.unknown.copy') },
       ],
     },
@@ -124,21 +168,57 @@ export function OnboardingPage() {
   const [answers, setAnswers] = useState(defaultAnswers);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showReminders, setShowReminders] = useState(false);
 
   const questions = useMemo(() => getQuestions(t), [t]);
   const currentQuestion = questions[step];
-  const selectedValue = answers[currentQuestion.key];
   const isLastStep = step === questions.length - 1;
   const progress = ((step + 1) / questions.length) * 100;
   const Icon = currentQuestion.icon;
+  const referenceDoseSteps =
+    currentQuestion.key === 'medication' ? getReferenceDoseSteps(answers.medication) : null;
 
-  function handleOptionSelect(value: OnboardingAnswerValue) {
-    setAnswers((current) => ({ ...current, [currentQuestion.key]: value } as OnboardingAnswers));
+  function isOptionSelected(value: string): boolean {
+    if (currentQuestion.multiSelect) {
+      return answers.symptomCodes.includes(value);
+    }
 
-    if (currentQuestion.key === 'language' && (value === 'en' || value === 'es' || value === 'pt')) {
+    return answers[currentQuestion.key as ScalarQuestionKey] === value;
+  }
+
+  const freeTextVisible = currentQuestion.multiSelect
+    ? Boolean(currentQuestion.freeTextOnValue && answers.symptomCodes.includes(currentQuestion.freeTextOnValue))
+    : answers[currentQuestion.key as ScalarQuestionKey] === currentQuestion.freeTextOnValue;
+
+  function handleScalarSelect(value: string) {
+    const key = currentQuestion.key as ScalarQuestionKey;
+    setAnswers((current) => ({ ...current, [key]: value }));
+
+    if (key === 'language' && (value === 'en' || value === 'es' || value === 'pt')) {
       void i18n.changeLanguage(value);
       setLanguage(value);
     }
+  }
+
+  function handleMultiToggle(value: string) {
+    setAnswers((current) => {
+      // "none" is exclusive: picking it clears everything else, and picking
+      // anything else clears "none".
+      if (value === 'none') {
+        return { ...current, symptomCodes: ['none'] };
+      }
+
+      const withoutNone = current.symptomCodes.filter((code) => code !== 'none');
+      const next = withoutNone.includes(value)
+        ? withoutNone.filter((code) => code !== value)
+        : [...withoutNone, value];
+
+      return { ...current, symptomCodes: next.length > 0 ? next : ['none'] };
+    });
+  }
+
+  function handleFreeTextChange(key: FreeTextKey | ExtraTextKey, value: string) {
+    setAnswers((current) => ({ ...current, [key]: value }));
   }
 
   async function handleNext() {
@@ -151,13 +231,7 @@ export function OnboardingPage() {
       return;
     }
 
-    const profile: TreatmentProfile = deriveTreatmentProfile({
-      stage: answers.stage as TreatmentStage,
-      symptomProfile: answers.symptomProfile as SymptomProfile,
-      medication: answers.medication as MedicationName,
-      goal: answers.goal as TreatmentGoal,
-      language: answers.language as AppLanguage,
-    });
+    const profile = deriveTreatmentProfile(answers);
 
     setSaving(true);
     setSubmitError(null);
@@ -165,12 +239,40 @@ export function OnboardingPage() {
     try {
       setProfile(profile, userId);
       await saveTreatmentProfile(userId, profile);
-      navigate('/dashboard', { replace: true });
+      setShowReminders(true);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Unable to save treatment profile.');
     } finally {
       setSaving(false);
     }
+  }
+
+  if (showReminders) {
+    return (
+      <main className="onboarding-shell">
+        <section className="onboarding-hero">
+          <div className="brand-mark" style={{ marginBottom: 18 }}>
+            <Sparkles className="icon" />
+            <span>{t('appName')}</span>
+          </div>
+          <div className="page-kicker">{t('reminders.setupKicker')}</div>
+          <h1 className="page-title">{t('reminders.setupTitle')}</h1>
+          <p className="page-subtitle">{t('reminders.setupSubtitle')}</p>
+        </section>
+
+        <section className="onboarding-card">
+          <ReminderSettings />
+          <button
+            className="cta"
+            type="button"
+            style={{ marginTop: 16, width: '100%' }}
+            onClick={() => navigate('/dashboard', { replace: true })}
+          >
+            {t('reminders.enterApp')}
+          </button>
+        </section>
+      </main>
+    );
   }
 
   return (
@@ -194,20 +296,25 @@ export function OnboardingPage() {
             <div className="page-kicker">{currentQuestion.eyebrow}</div>
             <h2 className="panel-title">{currentQuestion.title}</h2>
             <p className="panel-copy">{currentQuestion.copy}</p>
+            {currentQuestion.multiSelect ? (
+              <p className="panel-copy" style={{ fontSize: 13 }}>{t('onboarding.multiSelectHint')}</p>
+            ) : null}
           </div>
           <Icon className="icon" />
         </div>
 
         <div className="onboarding-options">
           {currentQuestion.options.map((option) => {
-            const isSelected = selectedValue === option.value;
+            const isSelected = isOptionSelected(option.value);
 
             return (
               <button
                 key={option.value}
                 type="button"
                 className={isSelected ? 'onboarding-option selected' : 'onboarding-option'}
-                onClick={() => handleOptionSelect(option.value)}
+                onClick={() =>
+                  currentQuestion.multiSelect ? handleMultiToggle(option.value) : handleScalarSelect(option.value)
+                }
               >
                 <div className="onboarding-option-title">{option.title}</div>
                 <div className="onboarding-option-copy">{option.copy}</div>
@@ -215,6 +322,44 @@ export function OnboardingPage() {
             );
           })}
         </div>
+
+        {currentQuestion.freeTextAnswerKey && freeTextVisible ? (
+          <label className="stack" style={{ gap: 8, marginTop: 16 }}>
+            <span className="onboarding-step">{t('onboarding.otherLabel')}</span>
+            <input
+              className="auth-input"
+              type="text"
+              placeholder={t('onboarding.otherPlaceholder')}
+              value={answers[currentQuestion.freeTextAnswerKey] ?? ''}
+              onChange={(event) => handleFreeTextChange(currentQuestion.freeTextAnswerKey!, event.target.value)}
+            />
+          </label>
+        ) : null}
+
+        {currentQuestion.extraTextField ? (
+          <div className="stack" style={{ marginTop: 16 }}>
+            <label className="stack" style={{ gap: 8 }}>
+              <span className="onboarding-step">{t(currentQuestion.extraTextField.labelKey)}</span>
+              <input
+                className="auth-input"
+                type="text"
+                placeholder={t(currentQuestion.extraTextField.placeholderKey)}
+                value={answers[currentQuestion.extraTextField.key] ?? ''}
+                onChange={(event) =>
+                  handleFreeTextChange(currentQuestion.extraTextField!.key, event.target.value)
+                }
+              />
+            </label>
+            <p className="panel-copy" style={{ fontSize: 13 }}>
+              {t(currentQuestion.extraTextField.helpKey)}
+            </p>
+            {referenceDoseSteps ? (
+              <p className="panel-copy" style={{ fontSize: 13 }}>
+                {t('onboarding.referenceDoseLabel')}: {referenceDoseSteps.map((entry) => entry.dose).join(' -> ')}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="onboarding-actions">
           <div className="onboarding-step">
@@ -230,4 +375,3 @@ export function OnboardingPage() {
     </main>
   );
 }
-

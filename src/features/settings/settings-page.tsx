@@ -1,7 +1,8 @@
-import { Languages, LogOut, RotateCcw, ShieldCheck, UserCog } from 'lucide-react';
+import { BarChart3, Languages, LogOut, RotateCcw, ShieldCheck, UserCog } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../../entities/admin/admin-store';
 import { useAuthStore } from '../../entities/auth/auth-store';
 import { useSubscriptionStore } from '../../entities/subscription/subscription-store';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
@@ -9,6 +10,7 @@ import { i18n, supportedLanguages } from '../../i18n';
 import { openCustomerPortal } from '../../lib/stripe';
 import { signOut } from '../../lib/supabase/auth';
 import { saveTreatmentProfile } from '../../lib/supabase/treatment-profile';
+import { ReminderSettings } from './reminder-settings';
 
 export function SettingsPage() {
   const { t } = useTranslation();
@@ -16,6 +18,7 @@ export function SettingsPage() {
   const user = useAuthStore((state) => state.user);
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const subscriptionStatus = useSubscriptionStore((state) => state.status);
+  const isAdmin = useAdminStore((state) => state.status === 'admin');
   const profile = useTreatmentProfileStore((state) => state.profile);
   const selectedLanguage = useTreatmentProfileStore((state) => state.selectedLanguage);
   const setLanguage = useTreatmentProfileStore((state) => state.setLanguage);
@@ -102,6 +105,12 @@ export function SettingsPage() {
               </div>
               <Languages className="icon" />
             </div>
+            {isAdmin ? (
+              <Link className="cta secondary" to="/insights">
+                <BarChart3 className="icon" />
+                {t('settings.viewInsights')}
+              </Link>
+            ) : null}
           </div>
         </article>
 
@@ -137,6 +146,8 @@ export function SettingsPage() {
             </button>
           </div>
         </article>
+
+        <ReminderSettings />
       </div>
     </main>
   );

@@ -11,6 +11,9 @@ type TreatmentProfileRow = {
   language: string | null;
   days_on_treatment: number | null;
   dose_frequency: string | null;
+  medication_dose_text: string | null;
+  primary_symptom_code: string | null;
+  metadata: { medicationOtherText?: string; primarySymptomOtherText?: string; symptomCodes?: string[] } | null;
 };
 
 function rowToTreatmentProfile(row: TreatmentProfileRow): TreatmentProfile {
@@ -23,6 +26,11 @@ function rowToTreatmentProfile(row: TreatmentProfileRow): TreatmentProfile {
     language: (row.language as TreatmentProfile['language']) ?? 'en',
     daysOnTreatment: row.days_on_treatment ?? undefined,
     doseFrequency: (row.dose_frequency as TreatmentProfile['doseFrequency']) ?? undefined,
+    medicationDoseText: row.medication_dose_text ?? undefined,
+    primarySymptomCode: row.primary_symptom_code ?? undefined,
+    medicationOtherText: row.metadata?.medicationOtherText,
+    primarySymptomOtherText: row.metadata?.primarySymptomOtherText,
+    symptomCodes: row.metadata?.symptomCodes ?? undefined,
   };
 }
 
@@ -36,6 +44,13 @@ function profileToRow(profile: TreatmentProfile) {
     language: profile.language,
     days_on_treatment: profile.daysOnTreatment ?? null,
     dose_frequency: profile.doseFrequency ?? null,
+    medication_dose_text: profile.medicationDoseText ?? null,
+    primary_symptom_code: profile.primarySymptomCode ?? null,
+    metadata: {
+      medicationOtherText: profile.medicationOtherText,
+      primarySymptomOtherText: profile.primarySymptomOtherText,
+      symptomCodes: profile.symptomCodes ?? [],
+    },
   };
 }
 

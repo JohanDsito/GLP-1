@@ -48,23 +48,42 @@ Deno.serve(async (request) => {
     event.type === 'customer.subscription.updated' ||
     event.type === 'customer.subscription.deleted'
   ) {
-    const subscription = event.data.object as Stripe.Subscription;
+    const eventSubscription = event.data.object as Stripe.Subscription;
+
+    // Never trust the status frozen inside the event payload: Stripe delivers
+    // `created` (status: incomplete) and `updated` (status: active) almost at
+    // once, and if `created` is processed last it would overwrite active with
+    // inactive. Re-fetch the live subscription so we always persist the current
+    // truth, regardless of event ordering.
+    let subscription = eventSubscription;
+    try {
+      subscription = await stripe.subscriptions.retrieve(eventSubscription.id);
+    } catch {
+      // Fall back to the event payload if the live fetch fails (e.g. the
+      // subscription was already deleted).
+    }
+
     const stripeCustomerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
-    const metadataUserId = subscription.metadata.user_id ?? null;
+    const metadataUserId = subscription.metadata.user_id ?? eventSubscription.metadata.user_id ?? null;
 
     if (!metadataUserId) {
       return new Response('Missing user_id metadata', { status: 200 });
     }
+
+    // As of API version 2026-06-24.dahlia, Stripe moved the billing period
+    // fields from the subscription itself to each subscription item.
+    const primaryItem = subscription.items.data[0];
+    const currentPeriodEnd = primaryItem?.current_period_end;
 
     const { error } = await supabase.from('subscriptions').upsert(
       {
         user_id: metadataUserId,
         stripe_customer_id: stripeCustomerId,
         stripe_subscription_id: subscription.id,
-        price_id: subscription.items.data[0]?.price?.id ?? null,
+        price_id: primaryItem?.price?.id ?? null,
         status: mapStripeStatus(subscription.status),
         cancel_at_period_end: subscription.cancel_at_period_end,
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        current_period_end: currentPeriodEnd ? new Date(currentPeriodEnd * 1000).toISOString() : null,
         metadata: subscription.metadata,
         synced_at: new Date().toISOString(),
       },

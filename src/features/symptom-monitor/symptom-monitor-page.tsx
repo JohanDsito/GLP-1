@@ -1,69 +1,114 @@
-import { AlertTriangle, CircleAlert, Pill, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { AlertTriangle, CircleAlert, MessageCircleQuestion, Pill } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
+import { Link } from 'react-router-dom';
+import { groupByCategory, type SideEffect } from '../../entities/side-effects/types';
+import type { SideEffectCategory } from '../../entities/treatment-profile/types';
+import { fetchActiveSideEffects } from '../../lib/supabase/symptoms';
 import { Section } from '../../shared/ui/section';
-
-const symptoms = ['Nausea', 'Hair loss', 'Constipation', 'Fatigue', 'Skin sagging'];
 
 export function SymptomMonitorPage() {
   const { t } = useTranslation();
-  const profile = useTreatmentProfileStore((state) => state.profile);
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>(['Nausea', 'Fatigue']);
+  const [sideEffects, setSideEffects] = useState<SideEffect[]>([]);
+  const [activeTab, setActiveTab] = useState<SideEffectCategory>('physical');
 
-  function toggleSymptom(symptom: string) {
-    setSelectedSymptoms((current) =>
-      current.includes(symptom) ? current.filter((value) => value !== symptom) : [...current, symptom],
-    );
-  }
+  useEffect(() => {
+    let mounted = true;
+
+    fetchActiveSideEffects()
+      .then((effects) => {
+        if (mounted) {
+          setSideEffects(effects);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const grouped = groupByCategory(sideEffects);
+  const visibleEffects = grouped[activeTab];
 
   return (
     <main className="page">
       <div className="page-head">
-        <div className="page-kicker">{t('symptoms.title')}</div>
-        <h1 className="page-title">{t('symptoms.title')}</h1>
-        <p className="page-subtitle">{t('symptoms.subtitle')}</p>
+        <div className="page-kicker">{t('sideEffects.title')}</div>
+        <h1 className="page-title">{t('sideEffects.title')}</h1>
+        <p className="page-subtitle">{t('sideEffects.browseSubtitle')}</p>
       </div>
 
-      <Section eyebrow={t('symptoms.status')} title={t('symptoms.signalForToday')}>
-        <div className="panel soft pad">
-          <div className="panel-header">
-            <div>
-              <div className="pill accent">{profile?.symptomProfile ? `${t('symptoms.activeWeek')} · ${profile.symptomProfile}` : t('symptoms.activeWeek')}</div>
-              <p className="panel-copy">{profile ? t('symptoms.profileSummary', { stage: profile.stage, goal: profile.goal }) : t('symptoms.prioritize')}</p>
-            </div>
-            <AlertTriangle className="icon" />
-          </div>
+      <div className="dashboard-pills" style={{ marginBottom: 16 }}>
+        <button
+          type="button"
+          className={activeTab === 'physical' ? 'choice-chip selected' : 'choice-chip'}
+          onClick={() => setActiveTab('physical')}
+        >
+          {t('sideEffects.physicalTab')}
+        </button>
+        <button
+          type="button"
+          className={activeTab === 'psychological' ? 'choice-chip selected' : 'choice-chip'}
+          onClick={() => setActiveTab('psychological')}
+        >
+          {t('sideEffects.psychologicalTab')}
+        </button>
+      </div>
+
+      <Section eyebrow={t('sideEffects.title')} title={t(`sideEffects.${activeTab}Tab`)}>
+        <div className="list">
+          {visibleEffects.map((effect) => {
+            const contentTitle = t(`sideEffects.content.${effect.code}.title`, effect.code);
+            const hasContent = i18nHasContent(t, effect.code);
+
+            const inner = (
+              <>
+                <div>
+                  {effect.reviewStatus !== 'reviewed' ? (
+                    <div className="pill soft" style={{ marginBottom: 8 }}>
+                      {t('sideEffects.draftBadge')}
+                    </div>
+                  ) : null}
+                  <div className="list-item-title">{contentTitle}</div>
+                  {!hasContent ? <div className="list-item-copy">{t('sideEffects.contentMissing')}</div> : null}
+                </div>
+                {activeTab === 'physical' ? <Pill className="icon" /> : <CircleAlert className="icon" />}
+              </>
+            );
+
+            return hasContent ? (
+              <Link className="list-item" key={effect.id} to={`/symptom-monitor/${effect.code}`}>
+                {inner}
+              </Link>
+            ) : (
+              <div className="list-item" key={effect.id}>
+                {inner}
+              </div>
+            );
+          })}
         </div>
       </Section>
 
       <div style={{ height: 16 }} />
 
-      <Section eyebrow={t('symptoms.selection')} title={t('symptoms.whatIsActive')}>
-        <div className="grid cards">
-          {symptoms.map((item, index) => (
-            <button
-              type="button"
-              className={selectedSymptoms.includes(item) ? 'panel pad symptom-card selected' : 'panel pad symptom-card'}
-              key={item}
-              onClick={() => toggleSymptom(item)}
-            >
-              <div className="panel-header">
-                <div className={selectedSymptoms.includes(item) ? 'pill accent' : 'pill primary'}>
-                  {selectedSymptoms.includes(item) ? t('symptoms.selected') : t('symptoms.available')}
-                </div>
-                {index === 0 ? <Pill className="icon" /> : index === 4 ? <Plus className="icon" /> : <CircleAlert className="icon" />}
-              </div>
-              <div className="metric">
-                <div className="metric-value" style={{ fontSize: 24 }}>
-                  {item}
-                </div>
-                <div className="metric-label">{t('symptoms.contextualCopy')}</div>
-              </div>
-            </button>
-          ))}
+      <div className="panel soft pad">
+        <div className="panel-header">
+          <div>
+            <div className="list-item-title">{t('sideEffects.didntFindIt')}</div>
+          </div>
+          <AlertTriangle className="icon" />
         </div>
-      </Section>
+        <Link className="cta secondary" to="/symptom-monitor/request">
+          <MessageCircleQuestion className="icon" />
+          {t('sideEffects.tellUs')}
+        </Link>
+      </div>
     </main>
   );
+}
+
+function i18nHasContent(t: (key: string) => string, code: string): boolean {
+  const key = `sideEffects.content.${code}.title`;
+  return t(key) !== key;
 }

@@ -6,18 +6,31 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 const appUrl = Deno.env.get('APP_URL') ?? '';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
 Deno.serve(async (request) => {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   if (!stripeSecretKey || !supabaseUrl || !supabaseAnonKey || !appUrl) {
-    return new Response('Missing Stripe or Supabase environment variables', { status: 500 });
+    return new Response('Missing Stripe or Supabase environment variables', {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response('Method not allowed', { status: 405, headers: corsHeaders });
   }
 
   const authHeader = request.headers.get('Authorization');
   if (!authHeader) {
-    return new Response('Missing Authorization header', { status: 401 });
+    return new Response('Missing Authorization header', { status: 401, headers: corsHeaders });
   }
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
@@ -28,7 +41,7 @@ Deno.serve(async (request) => {
   const { data: userData, error: userError } = await supabase.auth.getUser();
 
   if (userError || !userData.user) {
-    return new Response('Invalid session', { status: 401 });
+    return new Response('Invalid session', { status: 401, headers: corsHeaders });
   }
 
   const { data: subscription } = await supabase
@@ -38,7 +51,7 @@ Deno.serve(async (request) => {
     .maybeSingle();
 
   if (!subscription?.stripe_customer_id) {
-    return new Response('No Stripe customer found for this user', { status: 404 });
+    return new Response('No Stripe customer found for this user', { status: 404, headers: corsHeaders });
   }
 
   const stripe = new Stripe(stripeSecretKey);
@@ -50,11 +63,12 @@ Deno.serve(async (request) => {
     });
 
     return new Response(JSON.stringify({ url: portalSession.url }), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
     return new Response(error instanceof Error ? error.message : 'Unable to create portal session', {
       status: 500,
+      headers: corsHeaders,
     });
   }
 });

@@ -9,11 +9,23 @@ export type SymptomProfile = 'none' | 'mild' | 'moderate' | 'high';
 
 export type TreatmentIntent = 'preventive' | 'reactive';
 
-export type MedicationName = 'semaglutide' | 'tirzepatide' | 'liraglutide' | 'unknown';
+export type MedicationName = 'semaglutide' | 'tirzepatide' | 'liraglutide' | 'other' | 'unknown';
 
 export type TreatmentGoal = 'avoid_side_effects' | 'manage_symptoms' | 'stay_consistent' | 'doctor_report';
 
 export type AppLanguage = 'en' | 'es' | 'pt';
+
+export type SideEffectCategory = 'physical' | 'psychological';
+
+export type ReviewStatus = 'draft' | 'reviewed';
+
+export type TimeOnTreatment =
+  | 'researching'
+  | 'lt_1_week'
+  | 'wk_1_4'
+  | 'mo_1_3'
+  | 'mo_3_6'
+  | 'mo_6_plus';
 
 export interface TreatmentProfile {
   stage: TreatmentStage;
@@ -24,6 +36,11 @@ export interface TreatmentProfile {
   language: AppLanguage;
   daysOnTreatment?: number;
   doseFrequency?: 'weekly' | 'daily' | 'other';
+  primarySymptomCode?: string;
+  primarySymptomOtherText?: string;
+  medicationOtherText?: string;
+  medicationDoseText?: string;
+  symptomCodes?: string[];
 }
 
 export interface OnboardingAnswers {
@@ -32,5 +49,9 @@ export interface OnboardingAnswers {
   medication: MedicationName;
   goal: TreatmentGoal;
   language: AppLanguage;
+  timeOnTreatment: TimeOnTreatment;
+  symptomCodes: string[];
+  primarySymptomOtherText?: string;
+  medicationOtherText?: string;
+  medicationDoseText?: string;
 }
-

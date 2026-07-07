@@ -1,4 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 export function GateScreen({ title, copy }: { title: string; copy: string }) {
+  const { t } = useTranslation();
+
   return (
     <main
       style={{
@@ -20,7 +24,7 @@ export function GateScreen({ title, copy }: { title: string; copy: string }) {
         }}
       >
         <div className="page-kicker" style={{ marginBottom: 12 }}>
-          Loading
+          {t('loading')}
         </div>
         <h1 className="panel-title" style={{ marginBottom: 8 }}>
           {title}

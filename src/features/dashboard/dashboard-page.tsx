@@ -1,10 +1,14 @@
-import { ArrowRight, CalendarDays, HeartPulse, MessageSquareText, Sparkles } from 'lucide-react';
+import { ArrowRight, CalendarDays, HeartPulse, LineChart, MessageSquareText, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useEngagementStore } from '../../entities/achievements/engagement-store';
+import { useAuthStore } from '../../entities/auth/auth-store';
 import {
     buildDashboardRecommendations
 } from '../../entities/recommendation/recommendation-engine';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
+import { fetchActiveSideEffects, fetchRecentSymptomRecords } from '../../lib/supabase/symptoms';
 
 function formatStage(stage: string) {
   return stage.replaceAll('_', ' ');
@@ -40,7 +44,39 @@ function getPriorityTone(tone: 'primary' | 'accent' | 'soft') {
 export function DashboardPage() {
   const { t } = useTranslation();
   const profile = useTreatmentProfileStore((state) => state.profile);
-  const recommendations = buildDashboardRecommendations(profile);
+  const userId = useAuthStore((state) => state.user?.id ?? null);
+  const [activeSymptomCodes, setActiveSymptomCodes] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    let mounted = true;
+
+    Promise.all([fetchActiveSideEffects(), fetchRecentSymptomRecords(userId)])
+      .then(([effects, records]) => {
+        if (!mounted) {
+          return;
+        }
+
+        const codeById = new Map(effects.map((effect) => [effect.id, effect.code]));
+        const codes = records
+          .filter((record) => record.severity > 0)
+          .map((record) => codeById.get(record.symptomId))
+          .filter((code): code is string => Boolean(code));
+
+        setActiveSymptomCodes(Array.from(new Set(codes)));
+      })
+      .catch(() => undefined);
+
+    return () => {
+      mounted = false;
+    };
+  }, [userId]);
+
+  const currentStreak = useEngagementStore((state) => state.currentStreak);
+  const recommendations = buildDashboardRecommendations(profile, activeSymptomCodes);
   const topRecommendation = recommendations[0];
 
   return (
@@ -52,6 +88,12 @@ export function DashboardPage() {
             {profile ? t('dashboard.titleKnown') : t('dashboard.titleUnknown')}
           </h1>
           <p className="dashboard-copy">{t('dashboard.headline.' + (profile ? (profile.symptomProfile === 'high' ? 'reactiveHigh' : profile.stage === 'stopped' || profile.stage === 'paused' ? 'paused' : profile.intent === 'preventive' ? 'preventive' : 'generic') : 'setup'))}</p>
+
+          {currentStreak > 0 ? (
+            <Link to="/progress" className="streak-chip" style={{ width: 'fit-content', marginBottom: 4 }}>
+              🔥 {t('achievements.streakDays', { count: currentStreak })}
+            </Link>
+          ) : null}
 
           <div className="dashboard-pills">
             <span className={profile?.intent === 'preventive' ? 'pill soft' : 'pill primary'}>
@@ -77,20 +119,20 @@ export function DashboardPage() {
 
           <div className="dashboard-mini-grid">
             <div className="dashboard-mini-card">
-              <span className="dashboard-mini-label">Medication</span>
-              <strong>{profile ? formatMedication(profile.medication) : 'Pending'}</strong>
+              <span className="dashboard-mini-label">{t('dashboard.medication')}</span>
+              <strong>{profile ? formatMedication(profile.medication) : t('dashboard.pending')}</strong>
             </div>
             <div className="dashboard-mini-card">
-              <span className="dashboard-mini-label">Language</span>
+              <span className="dashboard-mini-label">{t('dashboard.language')}</span>
               <strong>{profile?.language.toUpperCase() ?? 'EN'}</strong>
             </div>
             <div className="dashboard-mini-card">
-              <span className="dashboard-mini-label">Symptoms</span>
-              <strong>{profile?.symptomProfile ?? 'n/a'}</strong>
+              <span className="dashboard-mini-label">{t('dashboard.symptoms')}</span>
+              <strong>{profile?.symptomProfile ?? t('dashboard.notSet')}</strong>
             </div>
             <div className="dashboard-mini-card">
-              <span className="dashboard-mini-label">Status</span>
-              <strong>{profile ? 'Active' : 'Setup'}</strong>
+              <span className="dashboard-mini-label">{t('dashboard.status')}</span>
+              <strong>{profile ? t('dashboard.active') : t('dashboard.setup')}</strong>
             </div>
           </div>
         </div>
@@ -101,8 +143,8 @@ export function DashboardPage() {
           <article className="panel pad dashboard-priority">
             <div className="panel-header">
               <div>
-                <div className="page-kicker">Priority stack</div>
-                <h2 className="panel-title">What should be surfaced first?</h2>
+                <div className="page-kicker">{t('dashboard.priorityStack')}</div>
+                <h2 className="panel-title">{t('dashboard.priorityTitle')}</h2>
               </div>
               <Link className="subtle-link" to="/symptom-monitor">
                 {t('dashboard.openSymptoms')} <ArrowRight className="icon" style={{ display: 'inline-block' }} />
@@ -140,22 +182,22 @@ export function DashboardPage() {
             <Link className="dashboard-action-card" to="/dose-tracker">
               <CalendarDays className="icon" />
               <div>
-                <div className="list-item-title">{t('dashboard.actionCards.logDoseTitle')}</div>
-                <div className="list-item-copy">{t('dashboard.actionCards.logDoseCopy')}</div>
+                <div className="list-item-title">{t('dashboard.logDose')}</div>
+                <div className="list-item-copy">{t('dashboard.quickActions.logDose')}</div>
               </div>
             </Link>
             <Link className="dashboard-action-card" to="/reports">
               <MessageSquareText className="icon" />
               <div>
-                <div className="list-item-title">{t('dashboard.actionCards.reportTitle')}</div>
-                <div className="list-item-copy">{t('dashboard.actionCards.reportCopy')}</div>
+                <div className="list-item-title">{t('dashboard.doctorReport')}</div>
+                <div className="list-item-copy">{t('dashboard.quickActions.report')}</div>
               </div>
             </Link>
-            <Link className="dashboard-action-card" to="/settings">
-              <HeartPulse className="icon" />
+            <Link className="dashboard-action-card" to="/progress">
+              <LineChart className="icon" />
               <div>
-                <div className="list-item-title">{t('dashboard.actionCards.settingsTitle')}</div>
-                <div className="list-item-copy">{t('dashboard.actionCards.settingsCopy')}</div>
+                <div className="list-item-title">{t('dashboard.progress')}</div>
+                <div className="list-item-copy">{t('dashboard.quickActions.progress')}</div>
               </div>
             </Link>
           </div>
@@ -165,8 +207,8 @@ export function DashboardPage() {
           <article className="panel pad dashboard-rail-card">
             <div className="panel-header">
               <div>
-                <div className="page-kicker">Snapshot</div>
-                <h2 className="panel-title">Treatment profile</h2>
+                <div className="page-kicker">{t('reports.snapshot')}</div>
+                <h2 className="panel-title">{t('dashboard.treatmentProfile')}</h2>
               </div>
               <HeartPulse className="icon" />
             </div>

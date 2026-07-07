@@ -13,6 +13,7 @@ export interface DashboardRecommendation {
 
 export function buildDashboardRecommendations(
   profile: TreatmentProfile | null,
+  activeSymptomCodes: string[] = [],
 ): Array<DashboardRecommendation> {
   const recommendations: Array<DashboardRecommendation> = [];
 
@@ -27,6 +28,22 @@ export function buildDashboardRecommendations(
         href: '/onboarding',
       },
     ];
+  }
+
+  const primarySymptomCode =
+    profile.primarySymptomCode && profile.primarySymptomCode !== 'none'
+      ? profile.primarySymptomCode
+      : (activeSymptomCodes[0] ?? null);
+
+  if (primarySymptomCode) {
+    recommendations.push({
+      id: 'side-effect',
+      title: 'Side-effect guidance',
+      copy: 'A specific plan for the symptom that matters most right now.',
+      priority: 'high',
+      tone: 'accent',
+      href: `/symptom-monitor/${primarySymptomCode}`,
+    });
   }
 
   if (profile.symptomProfile !== 'none') {
@@ -62,6 +79,24 @@ export function buildDashboardRecommendations(
     });
   }
 
+  recommendations.push({
+    id: 'nutrition',
+    title: 'Nutrition',
+    copy: 'The pillar that prevents most physical side effects, whether you have symptoms yet or not.',
+    priority: primarySymptomCode ? 'medium' : 'high',
+    tone: 'primary',
+    href: '/nutrition',
+  });
+
+  recommendations.push({
+    id: 'exercise',
+    title: 'Training',
+    copy: 'Keep muscle and tone while losing weight — a dedicated training plan is on its way.',
+    priority: 'low',
+    tone: 'soft',
+    href: '/nutrition',
+  });
+
   if (profile.intent === 'preventive') {
     recommendations.push({
       id: 'prevention',
@@ -84,7 +119,7 @@ export function buildDashboardRecommendations(
     });
   }
 
-  return recommendations.slice(0, 4);
+  return recommendations.slice(0, 5);
 }
 
 export function buildDashboardHeadline(profile: TreatmentProfile | null): string {
@@ -92,7 +127,9 @@ export function buildDashboardHeadline(profile: TreatmentProfile | null): string
     return 'Complete the treatment profile to unlock personalization.';
   }
 
-  if (profile.symptomProfile === 'high') {
+  const hasSpecificSymptom = Boolean(profile.primarySymptomCode && profile.primarySymptomCode !== 'none');
+
+  if (hasSpecificSymptom || profile.symptomProfile === 'high') {
     return 'Today should focus on symptom relief and calm tracking.';
   }
 
@@ -101,9 +138,8 @@ export function buildDashboardHeadline(profile: TreatmentProfile | null): string
   }
 
   if (profile.intent === 'preventive') {
-    return 'Today should focus on prevention, stability, and routine.';
+    return 'Today should focus on prevention: nutrition, movement, and steady tracking.';
   }
 
   return 'Today should focus on consistent tracking and timely support.';
 }
-

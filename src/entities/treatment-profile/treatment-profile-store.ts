@@ -53,7 +53,6 @@ export const useTreatmentProfileStore = create<TreatmentProfileState>()(
         set({
           profile: null,
           profileUserId: null,
-          selectedLanguage: null,
           onboardingComplete: false,
         }),
     }),

@@ -196,6 +196,51 @@ button:disabled {
   gap: 10px;
 }
 
+/* Selectable choice chips (symptom severity, mood/energy/sleep scales).
+   The selected state is a solid fill so it is unmistakable at a glance. */
+.choice-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.choice-chip:hover:not(:disabled) {
+  border-color: var(--primary-strong);
+}
+
+.choice-chip.selected {
+  background: var(--primary-strong);
+  border-color: var(--primary-strong);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 104, 95, 0.28);
+}
+
+.choice-chip:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.choice-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .dashboard-hero__panel {
   display: grid;
   gap: 14px;
@@ -754,4 +799,93 @@ button:disabled {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Print: only the report content, clean for saving as PDF. */
+@media print {
+  body {
+    background: #fff;
+  }
+  .app-topbar,
+  .nav,
+  .no-print,
+  .subtle-link {
+    display: none !important;
+  }
+  .page {
+    padding: 0 !important;
+  }
+  .panel {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
+
+/* Achievement celebration */
+.celebration-card {
+  position: relative;
+}
+.celebration-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.celebration-sparkles span {
+  position: absolute;
+  top: -12px;
+  left: calc(var(--i) * 7.5%);
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.9;
+  animation: celebration-fall 1400ms ease-in forwards;
+  animation-delay: calc(var(--i) * 60ms);
+}
+.celebration-sparkles span:nth-child(3n) { background: var(--primary-strong); }
+.celebration-sparkles span:nth-child(3n + 1) { background: var(--warning); }
+@keyframes celebration-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.95; }
+  100% { transform: translateY(340px) rotate(300deg); opacity: 0; }
+}
+
+.streak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: #8a4c00;
+  font-weight: 800;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 12px;
+}
+.achievement-badge {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  padding: 14px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.achievement-badge.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+.achievement-badge .emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+.achievement-badge .label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
 }
