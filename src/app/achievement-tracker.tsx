@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { evaluateEarnedAchievements } from '../entities/achievements/catalog';
 import { useEngagementStore } from '../entities/achievements/engagement-store';
 import { useAuthStore } from '../entities/auth/auth-store';
-import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
 import { fetchEarnedAchievements, insertAchievements } from '../lib/supabase/achievements';
 import { fetchEngagement } from '../lib/supabase/engagement';
 import { getFirstName } from '../lib/supabase/profile';
@@ -16,7 +15,10 @@ export function AchievementTracker() {
   const user = useAuthStore((state) => state.user);
   const userId = user?.id ?? null;
   const firstName = getFirstName(user);
-  const daysOnTreatment = useTreatmentProfileStore((state) => state.profile?.daysOnTreatment ?? null);
+  // Days since the account was created — tenure milestones are earned in-app.
+  const accountAgeDays = user?.created_at
+    ? Math.floor((Date.now() - new Date(user.created_at).getTime()) / (24 * 60 * 60 * 1000))
+    : null;
   const setEngagement = useEngagementStore((state) => state.setEngagement);
   const [celebrating, setCelebrating] = useState<string[]>([]);
   const ranForUser = useRef<string | null>(null);
@@ -32,7 +34,7 @@ export function AchievementTracker() {
     (async () => {
       try {
         const [{ stats }, earned] = await Promise.all([
-          fetchEngagement(userId, daysOnTreatment),
+          fetchEngagement(userId, accountAgeDays),
           fetchEarnedAchievements(userId),
         ]);
 
@@ -66,7 +68,7 @@ export function AchievementTracker() {
     return () => {
       cancelled = true;
     };
-  }, [userId, daysOnTreatment, setEngagement]);
+  }, [userId, accountAgeDays, setEngagement]);
 
   if (celebrating.length === 0) {
     return null;

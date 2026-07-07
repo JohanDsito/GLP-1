@@ -50,7 +50,7 @@ export function computeStreaks(activityDates: string[]): { current: number; long
 
 export async function fetchEngagement(
   userId: string,
-  daysOnTreatment: number | null,
+  accountAgeDays: number | null,
 ): Promise<{ stats: EngagementStats; activityDates: string[] }> {
   const [checkins, doses, symptomRecords, weights] = await Promise.all([
     fetchCheckinHistory(userId),
@@ -83,7 +83,7 @@ export async function fetchEngagement(
       longestStreak: longest,
       weightLossPct,
       totalCheckins: checkins.length,
-      daysOnTreatment,
+      accountAgeDays,
     },
     activityDates: dates,
   };

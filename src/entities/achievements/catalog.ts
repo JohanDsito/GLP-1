@@ -13,7 +13,8 @@ export interface EngagementStats {
   longestStreak: number;
   weightLossPct: number | null;
   totalCheckins: number;
-  daysOnTreatment: number | null;
+  /** Days since the account was created — tenure milestones are earned in-app. */
+  accountAgeDays: number | null;
 }
 
 // Ordered so "next milestone" logic can walk the list per type.
@@ -44,7 +45,7 @@ function metricForType(type: AchievementType, stats: EngagementStats): number | 
     case 'consistency':
       return stats.totalCheckins;
     case 'tenure':
-      return stats.daysOnTreatment;
+      return stats.accountAgeDays;
   }
 }
 
