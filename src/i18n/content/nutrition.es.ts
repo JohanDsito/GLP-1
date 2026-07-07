@@ -10,8 +10,8 @@ export const nutritionContentEs = {
       copy: 'Procura incluir una fuente de proteina en cada comida. Es la palanca mas importante para prevenir la perdida muscular mientras bajas de peso rapido.',
     },
     {
-      title: 'Comidas pequenas y frecuentes',
-      copy: 'Porciones mas pequenas y mas seguido son mas faciles de tolerar con un estomago mas lento, y reducen la nausea y el reflujo.',
+      title: 'Comidas pequeñas y frecuentes',
+      copy: 'Porciones mas pequeñas y mas seguido son mas faciles de tolerar con un estomago mas lento, y reducen la nausea y el reflujo.',
     },
     {
       title: 'Hidratacion',
@@ -19,14 +19,14 @@ export const nutritionContentEs = {
     },
     {
       title: 'Fibra, poco a poco',
-      copy: 'La fibra ayuda con el estrenimiento, pero agregar demasiada muy rapido puede empeorar la hinchazon — auméntala despacio junto con el agua.',
+      copy: 'La fibra ayuda con el estreñimiento, pero agregar demasiada muy rapido puede empeorar la hinchazon — auméntala despacio junto con el agua.',
     },
   ],
   faq: [
     {
       question: 'Que puedo comer si ya no tengo apetito?',
       answer:
-        'Enfocate en alimentos densos en nutrientes y proteina en cantidades pequenas en vez de forzar comidas grandes — un batido con proteina, yogur o huevos pueden cubrir mas de lo que parece.',
+        'Enfocate en alimentos densos en nutrientes y proteina en cantidades pequeñas en vez de forzar comidas grandes — un batido con proteina, yogur o huevos pueden cubrir mas de lo que parece.',
     },
     {
       question: 'Cuanta proteina debo tomar al dia?',
@@ -41,7 +41,7 @@ export const nutritionContentEs = {
     {
       question: 'Cuanto debo comer en cada comida?',
       answer:
-        'Porciones mas pequenas que antes del tratamiento son normales y esperadas — el medicamento esta diseñado para reducir el apetito. Come despacio y para en la primera senal de llenura.',
+        'Porciones mas pequeñas que antes del tratamiento son normales y esperadas — el medicamento esta diseñado para reducir el apetito. Come despacio y para en la primera señal de llenura.',
     },
     {
       question: 'Que suplementos necesito tomar?',
@@ -56,12 +56,12 @@ export const nutritionContentEs = {
     {
       question: 'Que comer cuando viajo?',
       answer:
-        'Planea con anticipacion opciones con enfoque en proteina (huevos, proteina a la plancha, yogur) y lleva un snack pequeno por si el apetito vuelve de forma impredecible.',
+        'Planea con anticipacion opciones con enfoque en proteina (huevos, proteina a la plancha, yogur) y lleva un snack pequeño por si el apetito vuelve de forma impredecible.',
     },
     {
       question: 'Que alimentos empeoran las nauseas?',
       answer:
-        'Los alimentos grasosos, fritos, muy dulces o muy condimentados suelen empeorar la nausea en la mayoria de las personas — las comidas sencillas, pequenas y con enfoque en proteina suelen tolerarse mejor.',
+        'Los alimentos grasosos, fritos, muy dulces o muy condimentados suelen empeorar la nausea en la mayoria de las personas — las comidas sencillas, pequeñas y con enfoque en proteina suelen tolerarse mejor.',
     },
     {
       question: 'Como adapto mi alimentacion si tengo diabetes, hipotiroidismo o SOP?',

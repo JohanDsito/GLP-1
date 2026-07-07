@@ -596,7 +596,7 @@ const resources = {
       },
       languageNames: {
         en: 'Ingles',
-        es: 'Espanol',
+        es: 'Español',
         pt: 'Portugues',
       },
       languageSelection: {
@@ -695,7 +695,7 @@ const resources = {
           },
           symptomProfile: {
             title: 'Que tan intensos son los sintomas actuales?',
-            copy: 'Esta es la senal principal para priorizar lo que debe mostrarse hoy en el dashboard.',
+            copy: 'Esta es la señal principal para priorizar lo que debe mostrarse hoy en el dashboard.',
             options: {
               none: { title: 'Sin sintomas', copy: 'Enfoque en prevencion.' },
               mild: { title: 'Leves', copy: 'Apoyo ligero y seguimiento.' },
@@ -723,7 +723,7 @@ const resources = {
               nausea: { title: 'Nausea', copy: 'Nausea o malestar estomacal.' },
               fatigue: { title: 'Fatiga', copy: 'Baja energia, cansancio.' },
               hairLoss: { title: 'Caida de cabello', copy: 'Perdida de cabello notable.' },
-              constipation: { title: 'Estrenimiento', copy: 'Enlentecimiento digestivo.' },
+              constipation: { title: 'Estreñimiento', copy: 'Enlentecimiento digestivo.' },
               moodSwings: { title: 'Cambios de humor', copy: 'Irritabilidad o altibajos emocionales.' },
             },
           },
@@ -752,7 +752,7 @@ const resources = {
             copy: 'El producto es multilingue desde el primer dia.',
             options: {
               en: { title: 'Ingles', copy: 'Idioma principal.' },
-              es: { title: 'Espanol', copy: 'Español.' },
+              es: { title: 'Español', copy: 'Español.' },
               pt: { title: 'Portugues', copy: 'Português.' },
             },
           },
@@ -874,7 +874,7 @@ const resources = {
       tracking: {
         kicker: 'Seguimiento diario',
         title: 'Tu seguimiento diario en un solo lugar.',
-        subtitle: 'Registra tu dosis, como te sientes, tu sueno y cualquier sintoma.',
+        subtitle: 'Registra tu dosis, como te sientes, tu sueño y cualquier sintoma.',
         frequency: { weekly: 'Semanal', daily: 'Diaria', other: 'Personalizada' },
         loggedToday: 'Dosis registrada hoy',
         loggedThisWeek: 'Dosis registrada esta semana',
@@ -882,8 +882,8 @@ const resources = {
         checkinTitle: 'Registro diario',
         mood: 'Animo',
         energy: 'Energia',
-        sleepHours: 'Horas de sueno',
-        sleepQuality: 'Calidad del sueno',
+        sleepHours: 'Horas de sueño',
+        sleepQuality: 'Calidad del sueño',
         saveCheckin: 'Guardar registro',
         checkinSaved: 'Guardado por hoy.',
         symptomsKicker: 'Sintomas de hoy',
@@ -916,7 +916,7 @@ const resources = {
         showKg: 'Ver en kg',
         noWeight: 'Registra tu peso para empezar a ver tu tendencia.',
         wellbeingKicker: 'Bienestar',
-        wellbeingTitle: 'Animo, energia y sueno',
+        wellbeingTitle: 'Animo, energia y sueño',
         noWellbeing: 'Completa un registro diario para ver tus tendencias de bienestar.',
         symptomsKicker: 'Sintomas',
         symptomsTitle: 'Severidad de sintomas en el tiempo',
@@ -940,7 +940,7 @@ const resources = {
         items: {
           nausea: 'Nausea',
           hairLoss: 'Caida de cabello',
-          constipation: 'Estrenimiento',
+          constipation: 'Estreñimiento',
           fatigue: 'Fatiga',
           skinSagging: 'Flacidez de piel',
         },
@@ -964,7 +964,7 @@ const resources = {
         weightLatest: 'Peso actual',
         weightChange: 'Cambio de peso',
         dosesLogged: 'dosis registradas',
-        avgSleep: 'Sueno promedio',
+        avgSleep: 'Sueño promedio',
         noSymptoms: 'No hay sintomas activos registrados.',
         shareVia: 'Compartir por WhatsApp / email',
         reportFile: 'informe-glp1.txt',

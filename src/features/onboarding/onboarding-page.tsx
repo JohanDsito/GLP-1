@@ -1,4 +1,4 @@
-import { CalendarClock, ChevronRight, HeartPulse, Languages, Sparkles, Stethoscope } from 'lucide-react';
+import { CalendarClock, ChevronRight, HeartPulse, Sparkles, Stethoscope } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useAuthStore } from '../../entities/auth/auth-store';
 import { getReferenceDoseSteps } from '../../entities/medication/reference-dose-table';
 import { deriveTreatmentProfile } from '../../entities/treatment-profile/derive-treatment-profile';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
-import type { OnboardingAnswers } from '../../entities/treatment-profile/types';
+import type { AppLanguage, OnboardingAnswers } from '../../entities/treatment-profile/types';
 import { i18n } from '../../i18n';
 import { saveTreatmentProfile } from '../../lib/supabase/treatment-profile';
 import { ReminderSettings } from '../settings/reminder-settings';
@@ -143,18 +143,6 @@ function getQuestions(t: (key: string, options?: Record<string, unknown>) => str
         { value: 'doctor_report', title: t('onboarding.questions.goal.options.doctor_report.title'), copy: t('onboarding.questions.goal.options.doctor_report.copy') },
       ],
     },
-    {
-      key: 'language',
-      eyebrow: t('onboarding.language'),
-      title: t('onboarding.questions.language.title'),
-      copy: t('onboarding.questions.language.copy'),
-      icon: Languages,
-      options: [
-        { value: 'en', title: t('languageNames.en'), copy: t('onboarding.questions.language.options.en.copy') },
-        { value: 'es', title: t('languageNames.es'), copy: t('onboarding.questions.language.options.es.copy') },
-        { value: 'pt', title: t('languageNames.pt'), copy: t('onboarding.questions.language.options.pt.copy') },
-      ],
-    },
   ];
 }
 
@@ -163,9 +151,12 @@ export function OnboardingPage() {
   const navigate = useNavigate();
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const setProfile = useTreatmentProfileStore((state) => state.setProfile);
-  const setLanguage = useTreatmentProfileStore((state) => state.setLanguage);
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState(defaultAnswers);
+  const [answers, setAnswers] = useState<OnboardingAnswers>(() => ({
+    ...defaultAnswers,
+    // Language was already chosen at app start; carry it into the profile.
+    language: (['en', 'es', 'pt'].includes(i18n.language) ? i18n.language : 'en') as AppLanguage,
+  }));
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showReminders, setShowReminders] = useState(false);
@@ -193,11 +184,6 @@ export function OnboardingPage() {
   function handleScalarSelect(value: string) {
     const key = currentQuestion.key as ScalarQuestionKey;
     setAnswers((current) => ({ ...current, [key]: value }));
-
-    if (key === 'language' && (value === 'en' || value === 'es' || value === 'pt')) {
-      void i18n.changeLanguage(value);
-      setLanguage(value);
-    }
   }
 
   function handleMultiToggle(value: string) {

@@ -4,7 +4,7 @@ export const sideEffectsContentEs = {
     cause:
       'Los medicamentos GLP-1 hacen que el estomago se vacie mas lento, lo que puede generar sensacion de llenura, malestar o nausea, sobre todo justo despues de subir de dosis.',
     whatToDo:
-      'Come porciones mas pequenas y con mayor frecuencia en vez de comidas grandes. Evita alimentos grasosos, fritos o muy dulces. Come despacio y para antes de sentirte demasiado lleno. El te de jengibre o los caramelos de jengibre pueden ayudar. Si la nausea es fuerte, persistente o no te deja retener liquidos, contacta a tu medico.',
+      'Come porciones mas pequeñas y con mayor frecuencia en vez de comidas grandes. Evita alimentos grasosos, fritos o muy dulces. Come despacio y para antes de sentirte demasiado lleno. El te de jengibre o los caramelos de jengibre pueden ayudar. Si la nausea es fuerte, persistente o no te deja retener liquidos, contacta a tu medico.',
     supplements: ['Jengibre', 'Vitamina B6 (comentada comunmente con el medico para la nausea)'],
   },
   vomiting: {
@@ -12,11 +12,11 @@ export const sideEffectsContentEs = {
     cause:
       'El vomito suele ser una extension de la nausea causada por el vaciado lento del estomago, y puede ser mas probable tras subir de dosis o comer demasiado o muy rapido.',
     whatToDo:
-      'Toma liquidos claros en sorbos pequenos para evitar deshidratarte. Descansa y evita alimentos solidos hasta que se calme, luego reintroduce alimentos suaves poco a poco (galletas saladas, arroz, pan tostado). Si el vomito es frecuente, no te deja retener nada de liquido, o dura mas de un dia, contacta a tu medico pronto.',
+      'Toma liquidos claros en sorbos pequeños para evitar deshidratarte. Descansa y evita alimentos solidos hasta que se calme, luego reintroduce alimentos suaves poco a poco (galletas saladas, arroz, pan tostado). Si el vomito es frecuente, no te deja retener nada de liquido, o dura mas de un dia, contacta a tu medico pronto.',
     supplements: ['Sueros de rehidratacion con electrolitos'],
   },
   constipation: {
-    title: 'Estrenimiento',
+    title: 'Estreñimiento',
     cause:
       'La digestion mas lenta combinada con menor ingesta de alimentos puede reducir la frecuencia de las evacuaciones.',
     whatToDo:
@@ -26,7 +26,7 @@ export const sideEffectsContentEs = {
   diarrhea: {
     title: 'Diarrea',
     cause:
-      'Los cambios en la velocidad de digestion y motilidad intestinal causados por el medicamento a veces pueden inclinarse hacia heces mas sueltas en vez de estrenimiento.',
+      'Los cambios en la velocidad de digestion y motilidad intestinal causados por el medicamento a veces pueden inclinarse hacia heces mas sueltas en vez de estreñimiento.',
     whatToDo:
       'Mantente hidratado con agua y electrolitos. Reduce temporalmente los alimentos altos en grasa y fibra hasta que se estabilice. Si la diarrea es severa, con sangre, o dura mas de 2 dias, contacta a tu medico.',
     supplements: ['Sueros de rehidratacion con electrolitos', 'Probioticos (comentados comunmente con el medico)'],
@@ -36,7 +36,7 @@ export const sideEffectsContentEs = {
     cause:
       'Comer menos en general (menor ingesta calorica) junto con la adaptacion del cuerpo al medicamento puede reducir la energia disponible, sobre todo en las primeras semanas.',
     whatToDo:
-      'Prioriza proteina en cada comida para sostener una energia mas estable. Manten un horario de sueno constante. El movimiento ligero diario suele ayudar mas que descansar por completo. Si la fatiga es extrema o repentina, comentalo con tu medico para descartar otras causas (como azucar baja en sangre o anemia).',
+      'Prioriza proteina en cada comida para sostener una energia mas estable. Manten un horario de sueño constante. El movimiento ligero diario suele ayudar mas que descansar por completo. Si la fatiga es extrema o repentina, comentalo con tu medico para descartar otras causas (como azucar baja en sangre o anemia).',
     supplements: ['Vitamina B12', 'Hierro (solo si un examen de sangre muestra niveles bajos)'],
   },
   hairLoss: {
@@ -52,7 +52,7 @@ export const sideEffectsContentEs = {
     cause:
       'La menor sensacion de sed, la nausea, el vomito o la diarrea pueden reducir la ingesta de liquidos o aumentar su perdida.',
     whatToDo:
-      'Pon recordatorios para tomar agua durante el dia en vez de esperar a sentir sed. Incluye alimentos ricos en agua. Presta atencion a senales como orina oscura, mareo o boca seca, y contacta a tu medico si aparecen.',
+      'Pon recordatorios para tomar agua durante el dia en vez de esperar a sentir sed. Incluye alimentos ricos en agua. Presta atencion a señales como orina oscura, mareo o boca seca, y contacta a tu medico si aparecen.',
     supplements: ['Sueros de rehidratacion con electrolitos'],
   },
   reflux: {
@@ -60,7 +60,7 @@ export const sideEffectsContentEs = {
     cause:
       'El vaciado mas lento del estomago puede aumentar la presion y la probabilidad de que el acido estomacal suba hacia el esofago.',
     whatToDo:
-      'Come porciones mas pequenas, evita acostarte justo despues de comer, y reduce los alimentos picantes, grasosos o acidos si te generan sintomas. Elevar la cabecera de la cama puede ayudar en la noche. Si persiste o empeora, habla con tu medico.',
+      'Come porciones mas pequeñas, evita acostarte justo despues de comer, y reduce los alimentos picantes, grasosos o acidos si te generan sintomas. Elevar la cabecera de la cama puede ayudar en la noche. Si persiste o empeora, habla con tu medico.',
     supplements: [],
   },
   muscleLoss: {
@@ -84,7 +84,7 @@ export const sideEffectsContentEs = {
     cause:
       'Los cambios rapidos en los patrones de alimentacion, el azucar en sangre, y el ajuste emocional de cambiar tu relacion con la comida pueden afectar el animo.',
     whatToDo:
-      'Lleva un registro diario simple de como te sientes — los patrones son mas faciles de ver escritos que recordados. Comer con regularidad (aunque sean porciones pequenas) ayuda a estabilizar el azucar en sangre y el animo. Hablar con alguien de confianza, o con un terapeuta, sobre el lado emocional de este proceso puede ayudar.',
+      'Lleva un registro diario simple de como te sientes — los patrones son mas faciles de ver escritos que recordados. Comer con regularidad (aunque sean porciones pequeñas) ayuda a estabilizar el azucar en sangre y el animo. Hablar con alguien de confianza, o con un terapeuta, sobre el lado emocional de este proceso puede ayudar.',
     supplements: [],
   },
   anxiety: {
@@ -100,21 +100,21 @@ export const sideEffectsContentEs = {
     cause:
       'La menor ingesta de energia, la fatiga, y el esfuerzo mental de mantener una rutina nueva pueden reducir la motivacion para tareas que antes se sentian faciles.',
     whatToDo:
-      'Divide las tareas en pasos mas pequenos. Los logros pequenos y constantes (una caminata corta, una comida saludable) reconstruyen el impulso mejor que intentar hacer todo de una vez. Si esto se siente como algo mas que baja energia — como perder interes en cosas que antes disfrutabas — habla con tu medico.',
+      'Divide las tareas en pasos mas pequeños. Los logros pequeños y constantes (una caminata corta, una comida saludable) reconstruyen el impulso mejor que intentar hacer todo de una vez. Si esto se siente como algo mas que baja energia — como perder interes en cosas que antes disfrutabas — habla con tu medico.',
     supplements: [],
   },
   insomnia: {
     title: 'Insomnio / dificultad para dormir',
     cause:
-      'Los cambios en el horario de comidas, las fluctuaciones de azucar en sangre, o la ansiedad por el proceso de tratamiento pueden afectar el sueno.',
+      'Los cambios en el horario de comidas, las fluctuaciones de azucar en sangre, o la ansiedad por el proceso de tratamiento pueden afectar el sueño.',
     whatToDo:
-      'Manten una hora constante para acostarte y levantarte. Evita comidas grandes o pantallas justo antes de dormir. Si el sueno deficiente continua por mas de un par de semanas o te sientes agotado al dia siguiente de forma constante, comentalo con tu medico.',
+      'Manten una hora constante para acostarte y levantarte. Evita comidas grandes o pantallas justo antes de dormir. Si el sueño deficiente continua por mas de un par de semanas o te sientes agotado al dia siguiente de forma constante, comentalo con tu medico.',
     supplements: [],
   },
   foodRelationship: {
     title: 'Cambio en la relacion con la comida',
     cause:
-      'Perder el deseo de comer por consuelo, o notar cambios en el control de impulsos con la comida, el alcohol o las compras, es un efecto reconocido que algunas personas experimentan al cambiar las senales de apetito.',
+      'Perder el deseo de comer por consuelo, o notar cambios en el control de impulsos con la comida, el alcohol o las compras, es un efecto reconocido que algunas personas experimentan al cambiar las señales de apetito.',
     whatToDo:
       'Esto puede sentirse desorientador incluso cuando la perdida de peso en si es bienvenida. Date tiempo para ajustarte a una nueva relacion con la comida en vez de esperar que se sienta "normal" de inmediato. Si notas cambios importantes en tu animo, consumo de alcohol o habitos de gasto, vale la pena comentarlo con tu medico.',
     supplements: [],

@@ -20,6 +20,12 @@ export function LanguageSync() {
     if (translation.language !== nextLanguage) {
       void i18n.changeLanguage(nextLanguage);
     }
+
+    // Declare the real page language so the browser does not auto-translate
+    // (e.g. Brave/Chrome offering to "translate" the Spanish UI as if English).
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = nextLanguage;
+    }
   }, [fallbackLanguage, profileLanguage, selectedLanguage, translation.language]);
 
   return null;
