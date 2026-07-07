@@ -5,6 +5,7 @@ import { useAuthStore } from '../entities/auth/auth-store';
 import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
 import { fetchEarnedAchievements, insertAchievements } from '../lib/supabase/achievements';
 import { fetchEngagement } from '../lib/supabase/engagement';
+import { getFirstName } from '../lib/supabase/profile';
 import { CelebrationModal } from '../shared/ui/celebration-modal';
 
 /**
@@ -12,7 +13,9 @@ import { CelebrationModal } from '../shared/ui/celebration-modal';
  * tracking data, records any newly earned milestones, and celebrates them.
  */
 export function AchievementTracker() {
-  const userId = useAuthStore((state) => state.user?.id ?? null);
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id ?? null;
+  const firstName = getFirstName(user);
   const daysOnTreatment = useTreatmentProfileStore((state) => state.profile?.daysOnTreatment ?? null);
   const setEngagement = useEngagementStore((state) => state.setEngagement);
   const [celebrating, setCelebrating] = useState<string[]>([]);
@@ -69,5 +72,5 @@ export function AchievementTracker() {
     return null;
   }
 
-  return <CelebrationModal codes={celebrating} onClose={() => setCelebrating([])} />;
+  return <CelebrationModal codes={celebrating} firstName={firstName} onClose={() => setCelebrating([])} />;
 }

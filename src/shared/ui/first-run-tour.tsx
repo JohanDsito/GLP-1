@@ -1,6 +1,8 @@
 import { Apple, Bell, CalendarClock, HeartPulse, LineChart, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '../../entities/auth/auth-store';
+import { getFirstName } from '../../lib/supabase/profile';
 
 const TOUR_KEY = 'glp1-tour-done';
 
@@ -23,6 +25,7 @@ function tourAlreadySeen(): boolean {
 
 export function FirstRunTour() {
   const { t } = useTranslation();
+  const firstName = getFirstName(useAuthStore((state) => state.user));
   const [open, setOpen] = useState(() => !tourAlreadySeen());
   const [step, setStep] = useState(0);
 
@@ -76,7 +79,7 @@ export function FirstRunTour() {
         </div>
 
         <h2 className="panel-title" style={{ marginBottom: 8 }}>
-          {t(current.titleKey)}
+          {step === 0 && firstName ? t('tour.welcome.titleNamed', { name: firstName }) : t(current.titleKey)}
         </h2>
         <p className="panel-copy" style={{ marginBottom: 18 }}>
           {t(current.bodyKey)}

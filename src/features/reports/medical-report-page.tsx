@@ -31,7 +31,9 @@ function avg(values: number[]): number | null {
 export function MedicalReportPage() {
   const { t } = useTranslation();
   const profile = useTreatmentProfileStore((state) => state.profile);
-  const userId = useAuthStore((state) => state.user?.id ?? null);
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id ?? null;
+  const patientName = ((user?.user_metadata?.full_name as string) ?? '').trim();
   const [data, setData] = useState<ReportData | null>(null);
   const [unit] = useState<'kg' | 'lb'>(
     () => ((typeof localStorage !== 'undefined' && localStorage.getItem('glp1-weight-unit')) as 'kg' | 'lb') || 'kg',
@@ -110,6 +112,7 @@ export function MedicalReportPage() {
     const lines = [
       t('appName') + ' — ' + t('reports.title'),
       '',
+      ...(patientName ? [`${t('reports.patient')}: ${patientName}`] : []),
       `${t('reports.treatment')}: ${data.medication} (${data.dose})`,
       `${t('progress.weeksOnTreatment')}: ${data.weeksOnTreatment ?? '—'}`,
       `${t('reports.weightStart')}: ${fmtWeight(data.startWeightKg)}`,
@@ -160,6 +163,7 @@ export function MedicalReportPage() {
         <>
           <Section eyebrow={t('reports.snapshot')} title={t('reports.reportData')}>
             <div className="list">
+              {patientName ? <Row label={t('reports.patient')} value={patientName} /> : null}
               <Row label={t('reports.treatment')} value={`${data.medication} (${data.dose})`} />
               <Row label={t('progress.weeksOnTreatment')} value={String(data.weeksOnTreatment ?? '—')} />
               <Row label={t('reports.weightStart')} value={fmtWeight(data.startWeightKg)} />

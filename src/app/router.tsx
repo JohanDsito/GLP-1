@@ -4,6 +4,7 @@ import { AuthPage } from '../features/auth/auth-page';
 import { DashboardPage } from '../features/dashboard/dashboard-page';
 import { DoseTrackerPage } from '../features/dose-tracker/dose-tracker-page';
 import { LanguageSelectionPage } from '../features/language-selection/language-selection-page';
+import { LegalPage } from '../features/legal/legal-page';
 import { NotificationsPage } from '../features/notifications/notifications-page';
 import { NutritionPage } from '../features/nutrition/nutrition-page';
 import { ProgressPage } from '../features/progress/progress-page';
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
   {
     path: '/select-language',
     element: <LanguageSelectionPage />,
+  },
+  {
+    path: '/terms',
+    element: <LegalPage doc="terms" />,
+  },
+  {
+    path: '/privacy',
+    element: <LegalPage doc="privacy" />,
   },
   {
     path: '/auth',

@@ -117,7 +117,16 @@ Deno.serve(async () => {
       .maybeSingle();
     const lang = (langRow?.language as 'en' | 'es' | 'pt' | undefined) ?? 'es';
 
-    const { title, body } = messages[lang][kind];
+    const { data: profileRow } = await supabase
+      .from('profiles')
+      .select('first_name')
+      .eq('user_id', pref.user_id)
+      .maybeSingle();
+    const firstName = (profileRow?.first_name as string | null) ?? '';
+
+    const base = messages[lang][kind];
+    const title = firstName ? `${firstName}, ${base.title.charAt(0).toLowerCase()}${base.title.slice(1)}` : base.title;
+    const body = base.body;
     const url = '/dose-tracker';
 
     // In-app notification (always-works layer)

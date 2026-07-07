@@ -8,6 +8,7 @@ import { useSubscriptionStore } from '../../entities/subscription/subscription-s
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
 import { i18n, supportedLanguages } from '../../i18n';
 import { openCustomerPortal } from '../../lib/stripe';
+import { getFirstName } from '../../lib/supabase/profile';
 import { signOut } from '../../lib/supabase/auth';
 import { saveTreatmentProfile } from '../../lib/supabase/treatment-profile';
 import { ReminderSettings } from './reminder-settings';
@@ -73,6 +74,7 @@ export function SettingsPage() {
           <div className="panel-header">
             <div>
               <div className="pill primary">{t('settings.account')}</div>
+              {getFirstName(user) ? <div className="list-item-title">{getFirstName(user)}</div> : null}
               <p className="panel-copy">{user?.email ?? t('settings.noEmailLoaded')}</p>
             </div>
             <UserCog className="icon" />

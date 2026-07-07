@@ -4,7 +4,7 @@ import { useAuthStore } from '../entities/auth/auth-store';
 import { useSubscriptionStore } from '../entities/subscription/subscription-store';
 import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
 import { supabase } from '../lib/supabase/client';
-import { fetchIsAdmin } from '../lib/supabase/profile';
+import { fetchIsAdmin, syncProfileFromUser } from '../lib/supabase/profile';
 import { fetchSubscriptionStatus } from '../lib/supabase/subscription';
 import { fetchTreatmentProfile } from '../lib/supabase/treatment-profile';
 
@@ -87,6 +87,9 @@ export function SupabaseBootstrap() {
         }
 
         setSession(data.session ?? null);
+        if (data.session?.user) {
+          void syncProfileFromUser(data.session.user);
+        }
         void loadSubscription(data.session?.user.id);
       }
     });
@@ -98,6 +101,9 @@ export function SupabaseBootstrap() {
       }
 
       setSession(session);
+      if (session?.user) {
+        void syncProfileFromUser(session.user);
+      }
       void loadSubscription(session?.user.id);
     });
 

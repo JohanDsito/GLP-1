@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAchievementDef } from '../../entities/achievements/catalog';
 
-export function CelebrationModal({ codes, onClose }: { codes: string[]; onClose: () => void }) {
+export function CelebrationModal({
+  codes,
+  firstName,
+  onClose,
+}: {
+  codes: string[];
+  firstName?: string;
+  onClose: () => void;
+}) {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
 
@@ -41,7 +49,7 @@ export function CelebrationModal({ codes, onClose }: { codes: string[]; onClose:
         <div style={{ fontSize: 64, lineHeight: 1, margin: '8px 0 12px' }}>{def?.emoji ?? '🎉'}</div>
 
         <div className="page-kicker" style={{ color: 'var(--accent)' }}>
-          {t('achievements.unlocked')}
+          {firstName ? t('achievements.unlockedNamed', { name: firstName }) : t('achievements.unlocked')}
         </div>
         <h2 className="panel-title" style={{ marginTop: 6, marginBottom: 8 }}>
           {t(`achievements.items.${code}.title`, code)}

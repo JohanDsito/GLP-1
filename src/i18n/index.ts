@@ -1,6 +1,9 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import type { AppLanguage } from '../entities/treatment-profile/types';
+import { legalContentEn } from './content/legal.en';
+import { legalContentEs } from './content/legal.es';
+import { legalContentPt } from './content/legal.pt';
 import { nutritionContentEn } from './content/nutrition.en';
 import { nutritionContentEs } from './content/nutrition.es';
 import { nutritionContentPt } from './content/nutrition.pt';
@@ -28,7 +31,7 @@ const resources = {
         next: 'Next',
         skip: 'Skip',
         finish: "Got it, let's start",
-        welcome: { title: 'Welcome to GLP-1 Guide', body: 'A quick tour so you know where everything is. It only takes a moment.' },
+        welcome: { title: 'Welcome to GLP-1 Guide', titleNamed: 'Welcome, {{name}}!', body: 'A quick tour so you know where everything is. It only takes a moment.' },
         tracking: { title: 'Track your day', body: 'In "Tracking" you log your dose, how you feel, your weight, and your symptoms — once a day.' },
         progress: { title: 'See your progress', body: 'In "Progress" you see your weight, symptoms, and wellbeing trending over time.' },
         nutrition: { title: 'Your nutrition', body: 'In "Nutrition" you get eating guidance built for GLP-1 treatment, plus answers to common questions.' },
@@ -43,6 +46,7 @@ const resources = {
         streakDays: '{{count}}-day streak',
         badges: 'Milestones',
         unlocked: 'Achievement unlocked!',
+        unlockedNamed: '{{name}}, achievement unlocked!',
         next: 'Next',
         awesome: 'Awesome!',
         items: {
@@ -108,7 +112,27 @@ const resources = {
         haveAccount: 'Already have an account? Sign in',
         confirmEmail: 'Check your email to confirm the account, then sign in.',
         unableToAuthenticate: 'Unable to authenticate.',
+        firstName: 'First name',
+        lastName: 'Last name',
+        confirmPassword: 'Confirm password',
+        dateOfBirth: 'Date of birth',
+        sex: 'Sex',
+        sexSelect: 'Select...',
+        sexOptions: { female: 'Female', male: 'Male', other: 'Other', prefer_not: 'Prefer not to say' },
+        termsIntro: 'I accept the',
+        termsLink: 'Terms',
+        termsAnd: 'and the',
+        privacyLink: 'Privacy Policy',
+        errors: {
+          nameRequired: 'Please enter your first and last name.',
+          passwordShort: 'Password must be at least {{count}} characters.',
+          passwordMismatch: 'Passwords do not match.',
+          dobRequired: 'Please enter your date of birth.',
+          sexRequired: 'Please select an option.',
+          termsRequired: 'You must accept the Terms and Privacy Policy.',
+        },
       },
+      legal: legalContentEn,
       subscribe: {
         title: 'Activate membership to unlock the product.',
         subtitle: 'Stripe will be the source of truth for billing. Supabase will store the synced subscription state.',
@@ -229,6 +253,7 @@ const resources = {
       },
       dashboard: {
         personalizedToday: 'Personalized today',
+        greeting: 'Hi, {{name}}',
         titleKnown: 'Your treatment, organized around what matters now.',
         titleUnknown: 'Finish setup to personalize the dashboard.',
         headline: {
@@ -424,6 +449,7 @@ const resources = {
         reportData: 'Report data',
         treatment: 'Treatment',
         symptomLog: 'Symptom log',
+        patient: 'Patient',
         adherence: 'Adherence',
         exportOptions: 'Export options',
         downloadReport: 'Download as text',
@@ -559,7 +585,7 @@ const resources = {
         next: 'Siguiente',
         skip: 'Saltar',
         finish: 'Entendido, empezar',
-        welcome: { title: 'Bienvenido a GLP-1 Guide', body: 'Un recorrido corto para que sepas donde esta cada cosa. Solo toma un momento.' },
+        welcome: { title: 'Bienvenido a GLP-1 Guide', titleNamed: 'Bienvenido, {{name}}!', body: 'Un recorrido corto para que sepas donde esta cada cosa. Solo toma un momento.' },
         tracking: { title: 'Registra tu dia', body: 'En "Seguimiento" registras tu dosis, como te sientes, tu peso y tus sintomas — una vez al dia.' },
         progress: { title: 'Mira tu progreso', body: 'En "Progreso" ves como evolucionan tu peso, tus sintomas y tu bienestar con el tiempo.' },
         nutrition: { title: 'Tu alimentacion', body: 'En "Nutricion" tienes guia de alimentacion pensada para el tratamiento con GLP-1 y respuestas a dudas comunes.' },
@@ -574,6 +600,7 @@ const resources = {
         streakDays: 'racha de {{count}} dias',
         badges: 'Hitos',
         unlocked: 'Logro desbloqueado!',
+        unlockedNamed: '{{name}}, logro desbloqueado!',
         next: 'Siguiente',
         awesome: 'Genial!',
         items: {
@@ -639,7 +666,27 @@ const resources = {
         haveAccount: 'Ya tienes una cuenta? Inicia sesion',
         confirmEmail: 'Revisa tu correo para confirmar la cuenta y luego inicia sesion.',
         unableToAuthenticate: 'No se pudo autenticar.',
+        firstName: 'Nombre',
+        lastName: 'Apellido',
+        confirmPassword: 'Confirmar contraseña',
+        dateOfBirth: 'Fecha de nacimiento',
+        sex: 'Sexo',
+        sexSelect: 'Selecciona...',
+        sexOptions: { female: 'Femenino', male: 'Masculino', other: 'Otro', prefer_not: 'Prefiero no decir' },
+        termsIntro: 'Acepto los',
+        termsLink: 'Términos',
+        termsAnd: 'y la',
+        privacyLink: 'Política de privacidad',
+        errors: {
+          nameRequired: 'Ingresa tu nombre y apellido.',
+          passwordShort: 'La contraseña debe tener al menos {{count}} caracteres.',
+          passwordMismatch: 'Las contraseñas no coinciden.',
+          dobRequired: 'Ingresa tu fecha de nacimiento.',
+          sexRequired: 'Selecciona una opción.',
+          termsRequired: 'Debes aceptar los Términos y la Política de privacidad.',
+        },
       },
+      legal: legalContentEs,
       subscribe: {
         title: 'Activa la membresia para desbloquear el producto.',
         subtitle: 'Stripe sera la fuente de verdad para facturacion. Supabase guardara el estado sincronizado.',
@@ -760,6 +807,7 @@ const resources = {
       },
       dashboard: {
         personalizedToday: 'Personalizado hoy',
+        greeting: 'Hola, {{name}}',
         titleKnown: 'Tu tratamiento, organizado alrededor de lo que importa ahora.',
         titleUnknown: 'Termina la configuracion para personalizar el dashboard.',
         headline: {
@@ -956,6 +1004,7 @@ const resources = {
         reportData: 'Datos del informe',
         treatment: 'Tratamiento',
         symptomLog: 'Registro de sintomas',
+        patient: 'Paciente',
         adherence: 'Adherencia',
         exportOptions: 'Opciones de exportacion',
         downloadReport: 'Descargar como texto',
@@ -1091,7 +1140,7 @@ const resources = {
         next: 'Proximo',
         skip: 'Pular',
         finish: 'Entendi, comecar',
-        welcome: { title: 'Bem-vindo ao GLP-1 Guide', body: 'Um tour rapido para voce saber onde esta cada coisa. Leva so um momento.' },
+        welcome: { title: 'Bem-vindo ao GLP-1 Guide', titleNamed: 'Bem-vindo, {{name}}!', body: 'Um tour rapido para voce saber onde esta cada coisa. Leva so um momento.' },
         tracking: { title: 'Registre seu dia', body: 'Em "Acompanhamento" voce registra sua dose, como se sente, seu peso e seus sintomas — uma vez por dia.' },
         progress: { title: 'Veja seu progresso', body: 'Em "Progresso" voce ve como evoluem seu peso, seus sintomas e seu bem-estar ao longo do tempo.' },
         nutrition: { title: 'Sua alimentacao', body: 'Em "Nutricao" voce tem orientacao alimentar feita para o tratamento com GLP-1 e respostas a duvidas comuns.' },
@@ -1106,6 +1155,7 @@ const resources = {
         streakDays: 'sequencia de {{count}} dias',
         badges: 'Marcos',
         unlocked: 'Conquista desbloqueada!',
+        unlockedNamed: '{{name}}, conquista desbloqueada!',
         next: 'Proximo',
         awesome: 'Otimo!',
         items: {
@@ -1171,7 +1221,27 @@ const resources = {
         haveAccount: 'Ja tem uma conta? Entrar',
         confirmEmail: 'Verifique seu email para confirmar a conta e depois entre.',
         unableToAuthenticate: 'Nao foi possivel autenticar.',
+        firstName: 'Nome',
+        lastName: 'Sobrenome',
+        confirmPassword: 'Confirmar senha',
+        dateOfBirth: 'Data de nascimento',
+        sex: 'Sexo',
+        sexSelect: 'Selecione...',
+        sexOptions: { female: 'Feminino', male: 'Masculino', other: 'Outro', prefer_not: 'Prefiro nao dizer' },
+        termsIntro: 'Aceito os',
+        termsLink: 'Termos',
+        termsAnd: 'e a',
+        privacyLink: 'Política de privacidade',
+        errors: {
+          nameRequired: 'Digite seu nome e sobrenome.',
+          passwordShort: 'A senha deve ter pelo menos {{count}} caracteres.',
+          passwordMismatch: 'As senhas nao coincidem.',
+          dobRequired: 'Digite sua data de nascimento.',
+          sexRequired: 'Selecione uma opcao.',
+          termsRequired: 'Voce deve aceitar os Termos e a Política de privacidade.',
+        },
       },
+      legal: legalContentPt,
       subscribe: {
         title: 'Ative a assinatura para desbloquear o produto.',
         subtitle: 'O Stripe sera a fonte de verdade para cobranca. O Supabase guardara o estado sincronizado.',
@@ -1292,6 +1362,7 @@ const resources = {
       },
       dashboard: {
         personalizedToday: 'Personalizado hoje',
+        greeting: 'Ola, {{name}}',
         titleKnown: 'Seu tratamento, organizado em torno do que importa agora.',
         titleUnknown: 'Finalize a configuracao para personalizar o dashboard.',
         headline: {
@@ -1488,6 +1559,7 @@ const resources = {
         reportData: 'Dados do relatorio',
         treatment: 'Tratamento',
         symptomLog: 'Historico de sintomas',
+        patient: 'Paciente',
         adherence: 'Adesao',
         exportOptions: 'Opcoes de exportacao',
         downloadReport: 'Baixar como texto',

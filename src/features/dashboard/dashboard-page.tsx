@@ -8,6 +8,7 @@ import {
     buildDashboardRecommendations
 } from '../../entities/recommendation/recommendation-engine';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
+import { getFirstName } from '../../lib/supabase/profile';
 import { fetchActiveSideEffects, fetchRecentSymptomRecords } from '../../lib/supabase/symptoms';
 
 function formatStage(stage: string) {
@@ -44,7 +45,9 @@ function getPriorityTone(tone: 'primary' | 'accent' | 'soft') {
 export function DashboardPage() {
   const { t } = useTranslation();
   const profile = useTreatmentProfileStore((state) => state.profile);
-  const userId = useAuthStore((state) => state.user?.id ?? null);
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id ?? null;
+  const firstName = getFirstName(user);
   const [activeSymptomCodes, setActiveSymptomCodes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -83,7 +86,9 @@ export function DashboardPage() {
     <main className="page dashboard-page">
       <section className="dashboard-hero panel">
         <div className="dashboard-hero__content">
-          <div className="page-kicker">{t('dashboard.personalizedToday')}</div>
+          <div className="page-kicker">
+            {firstName ? t('dashboard.greeting', { name: firstName }) : t('dashboard.personalizedToday')}
+          </div>
           <h1 className="dashboard-title">
             {profile ? t('dashboard.titleKnown') : t('dashboard.titleUnknown')}
           </h1>
