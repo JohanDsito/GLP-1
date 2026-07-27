@@ -93,6 +93,20 @@ button:disabled {
   text-transform: uppercase;
 }
 
+.brand-logo {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-logo--sm {
+  height: 34px;
+}
+
+.brand-logo--lg {
+  height: 92px;
+}
+
 .topbar-pill {
   display: inline-flex;
   align-items: center;
@@ -889,4 +903,169 @@ button:disabled {
   font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
+}
+
+/* ============================ Muscle plan ============================ */
+.muscle-callout {
+  margin-top: 14px;
+  border-color: rgba(253, 118, 26, 0.28);
+  background: rgba(253, 118, 26, 0.08);
+}
+
+.muscle-day-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+.muscle-day-card {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 150px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.muscle-day-card:hover {
+  border-color: rgba(0, 104, 95, 0.35);
+}
+.muscle-day-card__focus {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.muscle-glp1-card {
+  border-color: rgba(253, 118, 26, 0.4);
+  background:
+    radial-gradient(circle at top right, rgba(253, 118, 26, 0.1), transparent 40%),
+    #fff;
+}
+
+.muscle-injection-banner {
+  border-color: rgba(163, 103, 0, 0.5);
+  background: rgba(255, 221, 184, 0.5);
+}
+
+.muscle-protein-card {
+  border-color: rgba(0, 131, 120, 0.35);
+  background: rgba(0, 131, 120, 0.08);
+}
+
+.muscle-set-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ============ Muscle plan — distinct visual theme ============ */
+/* Scoped re-skin: only the muscle-plan content adopts this energetic palette.
+   The global nav/topbar keep the normal theme for consistency. */
+.muscle-theme {
+  --primary: #4f46e5;
+  --primary-strong: #4338ca;
+  --primary-soft: #e6e6fb;
+  --accent: #f43f5e;
+  --accent-soft: #ffe4e9;
+}
+.muscle-theme .pill.primary {
+  background: rgba(79, 70, 229, 0.12);
+  color: var(--primary-strong);
+  border-color: rgba(79, 70, 229, 0.28);
+}
+.muscle-theme .pill.soft {
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-strong);
+  border-color: rgba(79, 70, 229, 0.16);
+}
+.muscle-theme .pill.accent {
+  background: rgba(244, 63, 94, 0.12);
+  color: #b3123a;
+  border-color: rgba(244, 63, 94, 0.28);
+}
+.muscle-theme .onboarding-option.selected {
+  background: rgba(79, 70, 229, 0.14);
+  border-color: rgba(79, 70, 229, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.3);
+}
+.muscle-theme .choice-chip.selected {
+  background: var(--primary-strong);
+  border-color: var(--primary-strong);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.28);
+}
+.muscle-theme .muscle-day-card:hover,
+.muscle-theme .dashboard-recommendation:hover {
+  border-color: rgba(79, 70, 229, 0.4);
+}
+.muscle-theme .muscle-glp1-card {
+  border-color: rgba(244, 63, 94, 0.4);
+  background:
+    radial-gradient(circle at top right, rgba(244, 63, 94, 0.1), transparent 42%),
+    #fff;
+}
+.muscle-theme .muscle-protein-card {
+  border-color: rgba(79, 70, 229, 0.3);
+  background: rgba(79, 70, 229, 0.07);
+}
+
+/* Dark hero band shown at the top of the muscle dashboard — the "you entered a
+   different section" signal. Bleeds to the content edges within .page. */
+.muscle-hero {
+  margin: -24px -18px 20px;
+  padding: 30px 18px 26px;
+  color: #fff;
+  background:
+    radial-gradient(circle at top right, rgba(244, 63, 94, 0.4), transparent 46%),
+    linear-gradient(155deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);
+}
+.muscle-hero .page-kicker {
+  color: #c7d2fe;
+}
+.muscle-hero .page-title {
+  color: #fff;
+}
+.muscle-hero .page-subtitle {
+  color: rgba(226, 232, 240, 0.9);
+}
+.muscle-hero .pill.primary {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.muscle-hero .pill.accent {
+  background: rgba(244, 63, 94, 0.85);
+  color: #fff;
+  border-color: transparent;
+}
+.muscle-hero .pill.soft {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Prominent muscle entry card on the main dashboard. */
+.muscle-entry-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid transparent;
+  color: #fff;
+  background:
+    radial-gradient(circle at top right, rgba(244, 63, 94, 0.45), transparent 50%),
+    linear-gradient(150deg, #1e1b4b, #4338ca);
+}
+.muscle-entry-card .list-item-title {
+  color: #fff;
+}
+.muscle-entry-card .list-item-copy {
+  color: rgba(226, 232, 240, 0.92);
 }

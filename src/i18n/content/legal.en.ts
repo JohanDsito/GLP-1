@@ -7,7 +7,7 @@ export const legalContentEn = {
     sections: [
       {
         h: '1. Nature of the service',
-        p: 'GLP-1 Guide is a companion and educational app for people on GLP-1 treatment. It is not a medical service, does not replace consultation with a healthcare professional, and does not provide medical diagnosis or treatment.',
+        p: 'Lumea is a companion and educational app for people on GLP-1 treatment. It is not a medical service, does not replace consultation with a healthcare professional, and does not provide medical diagnosis or treatment.',
       },
       {
         h: '2. Not medical advice',

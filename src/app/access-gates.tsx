@@ -88,6 +88,21 @@ export function RequireLanguageSelection({ children }: PropsWithChildren) {
   return children;
 }
 
+export function RequireMusclePlanAccess({ children }: PropsWithChildren) {
+  const hasMuscle = useSubscriptionStore((state) => state.hasMuscle);
+  const subscriptionStatus = useSubscriptionStore((state) => state.status);
+
+  if (subscriptionStatus === 'loading') {
+    return <LoadingGate />;
+  }
+
+  if (!hasMuscle) {
+    return <Navigate to="/muscle-plan/upgrade" replace />;
+  }
+
+  return children;
+}
+
 export function RequireAdmin({ children }: PropsWithChildren) {
   const adminStatus = useAdminStore((state) => state.status);
 

@@ -2,6 +2,7 @@ import { CheckCircle2, CreditCard, ExternalLink, ShieldCheck } from 'lucide-reac
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isStripeConfigured, openCheckout } from '../../lib/stripe';
+import { BrandMark } from '../../shared/ui/brand-mark';
 
 export function SubscriptionPage() {
   const { t } = useTranslation();
@@ -22,8 +23,7 @@ export function SubscriptionPage() {
     <main className="onboarding-shell">
       <section className="onboarding-hero">
         <div className="brand-mark" style={{ marginBottom: 18 }}>
-          <CreditCard className="icon" />
-          <span>{t('appName')}</span>
+          <BrandMark size="lg" />
         </div>
         <div className="page-kicker">{t('subscribe.plan')}</div>
         <h1 className="page-title">{t('subscribe.title')}</h1>

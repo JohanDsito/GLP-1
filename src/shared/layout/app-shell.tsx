@@ -7,6 +7,7 @@ import { useAuthStore } from '../../entities/auth/auth-store';
 import { fetchNotifications } from '../../lib/supabase/notifications';
 import { AchievementTracker } from '../../app/achievement-tracker';
 import { FirstRunTour } from '../ui/first-run-tour';
+import { BrandMark } from '../ui/brand-mark';
 
 const navItems = [
   { to: '/dashboard', labelKey: 'nav.home', icon: LayoutDashboard },
@@ -43,9 +44,8 @@ function Topbar() {
 
   return (
     <header className="app-topbar">
-      <Link className="brand-mark" to="/dashboard">
-        <HeartPulse className="icon" />
-        <span>{t('appName')}</span>
+      <Link className="brand-mark" to="/dashboard" aria-label={t('appName')}>
+        <BrandMark size="sm" />
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <div className="topbar-pill">

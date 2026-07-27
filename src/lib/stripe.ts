@@ -37,3 +37,20 @@ export async function openCustomerPortal(): Promise<CheckoutResult> {
   window.location.assign(data.url);
   return { ok: true };
 }
+
+export async function createMusclePlanCheckout(): Promise<CheckoutResult> {
+  if (!supabase) {
+    return { ok: false, error: 'Supabase is not configured.' };
+  }
+
+  const { data, error } = await supabase.functions.invoke<{ url: string }>('create-muscle-plan-checkout', {
+    method: 'POST',
+  });
+
+  if (error || !data?.url) {
+    return { ok: false, error: error?.message ?? 'Unable to start checkout.' };
+  }
+
+  window.location.assign(data.url);
+  return { ok: true };
+}

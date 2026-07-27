@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import { LogIn, Mail, ShieldCheck } from 'lucide-react';
+import { BrandMark } from '../../shared/ui/brand-mark';
 import { useTranslation } from 'react-i18next';
 import { signInWithEmail, signUpWithEmail } from '../../lib/supabase/auth';
 import { isSupabaseConfigured } from '../../lib/supabase/client';
@@ -95,8 +96,7 @@ export function AuthPage() {
     <main className="onboarding-shell">
       <section className="onboarding-hero">
         <div className="brand-mark" style={{ marginBottom: 18 }}>
-          <Sparkles className="icon" />
-          <span>{t('appName')}</span>
+          <BrandMark size="lg" />
         </div>
         <div className="page-kicker">{t('auth.secureAccess')}</div>
         <h1 className="page-title">{t('auth.title')}</h1>

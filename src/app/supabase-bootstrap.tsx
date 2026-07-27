@@ -5,7 +5,7 @@ import { useSubscriptionStore } from '../entities/subscription/subscription-stor
 import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
 import { supabase } from '../lib/supabase/client';
 import { fetchIsAdmin, syncProfileFromUser } from '../lib/supabase/profile';
-import { fetchSubscriptionStatus } from '../lib/supabase/subscription';
+import { fetchHasMusclePlan, fetchSubscriptionStatus } from '../lib/supabase/subscription';
 import { fetchTreatmentProfile } from '../lib/supabase/treatment-profile';
 
 function shouldResetProfile(currentProfileUserId: string | null, sessionUserId: string | undefined) {
@@ -23,6 +23,7 @@ function shouldResetProfile(currentProfileUserId: string | null, sessionUserId: 
 export function SupabaseBootstrap() {
   const setSession = useAuthStore((state) => state.setSession);
   const setSubscriptionStatus = useSubscriptionStore((state) => state.setStatus);
+  const setHasMuscle = useSubscriptionStore((state) => state.setHasMuscle);
   const setAdminStatus = useAdminStore((state) => state.setStatus);
   const hasHydrated = useTreatmentProfileStore((state) => state.hasHydrated);
   const resetProfile = useTreatmentProfileStore((state) => state.resetProfile);
@@ -45,6 +46,7 @@ export function SupabaseBootstrap() {
 
       if (!userId) {
         setSubscriptionStatus('inactive');
+        setHasMuscle(false);
         setAdminStatus('not_admin');
         return;
       }
@@ -53,14 +55,16 @@ export function SupabaseBootstrap() {
       setAdminStatus('loading');
 
       try {
-        const [status, profile, isAdmin] = await Promise.all([
+        const [status, profile, isAdmin, hasMuscle] = await Promise.all([
           fetchSubscriptionStatus(userId),
           fetchTreatmentProfile(userId),
           fetchIsAdmin(userId),
+          fetchHasMusclePlan(userId),
         ]);
 
         if (mounted && requestId === nextRequestId) {
           setSubscriptionStatus(status);
+          setHasMuscle(hasMuscle);
           setAdminStatus(isAdmin ? 'admin' : 'not_admin');
           if (profile) {
             setProfile(profile, userId);

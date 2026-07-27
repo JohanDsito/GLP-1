@@ -1,4 +1,5 @@
 import { CalendarClock, ChevronRight, HeartPulse, Sparkles, Stethoscope } from 'lucide-react';
+import { BrandMark } from '../../shared/ui/brand-mark';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -238,8 +239,7 @@ export function OnboardingPage() {
       <main className="onboarding-shell">
         <section className="onboarding-hero">
           <div className="brand-mark" style={{ marginBottom: 18 }}>
-            <Sparkles className="icon" />
-            <span>{t('appName')}</span>
+            <BrandMark size="lg" />
           </div>
           <div className="page-kicker">{t('reminders.setupKicker')}</div>
           <h1 className="page-title">{t('reminders.setupTitle')}</h1>
@@ -265,8 +265,7 @@ export function OnboardingPage() {
     <main className="onboarding-shell">
       <section className="onboarding-hero">
         <div className="brand-mark" style={{ marginBottom: 18 }}>
-          <Sparkles className="icon" />
-          <span>{t('appName')}</span>
+          <BrandMark size="lg" />
         </div>
         <div className="page-kicker">{t('onboarding.welcomeFlow')}</div>
         <h1 className="page-title">{t('onboarding.heroTitle')}</h1>

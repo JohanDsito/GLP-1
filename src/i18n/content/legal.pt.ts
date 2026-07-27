@@ -7,7 +7,7 @@ export const legalContentPt = {
     sections: [
       {
         h: '1. Natureza do serviço',
-        p: 'O GLP-1 Guide é um app de acompanhamento e educação para pessoas em tratamento com agonistas GLP-1. Não é um serviço médico, não substitui a consulta com um profissional de saúde e não fornece diagnóstico nem tratamento médico.',
+        p: 'O Lumea é um app de acompanhamento e educação para pessoas em tratamento com agonistas GLP-1. Não é um serviço médico, não substitui a consulta com um profissional de saúde e não fornece diagnóstico nem tratamento médico.',
       },
       {
         h: '2. Não é conselho médico',

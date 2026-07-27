@@ -43,6 +43,35 @@ Deno.serve(async (request) => {
     return new Response(error instanceof Error ? error.message : 'Invalid signature', { status: 400 });
   }
 
+  // One-time purchases (e.g. the GLP-1 Muscle Plan add-on).
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const metadataUserId = session.metadata?.user_id ?? session.client_reference_id ?? null;
+    const product = session.metadata?.product ?? null;
+
+    if (metadataUserId && product === 'muscle_plan' && session.payment_status === 'paid') {
+      const stripeCustomerId =
+        typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null);
+
+      const { error } = await supabase.from('subscriptions').upsert(
+        {
+          user_id: metadataUserId,
+          has_muscle_plan: true,
+          ...(stripeCustomerId ? { stripe_customer_id: stripeCustomerId } : {}),
+        },
+        { onConflict: 'user_id' },
+      );
+
+      if (error) {
+        return new Response(error.message, { status: 500 });
+      }
+    }
+
+    return new Response(JSON.stringify({ received: true }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   if (
     event.type === 'customer.subscription.created' ||
     event.type === 'customer.subscription.updated' ||

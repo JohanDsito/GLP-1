@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, HeartPulse, LineChart, MessageSquareText, Sparkles } from 'lucide-react';
+import { ArrowRight, CalendarDays, Dumbbell, HeartPulse, LineChart, MessageSquareText, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -142,6 +142,14 @@ export function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <Link className="muscle-entry-card" to="/muscle-plan/dashboard">
+        <div>
+          <div className="list-item-title">{t('musclePlan.title')}</div>
+          <div className="list-item-copy">{t('dashboard.musclePlanEntry')}</div>
+        </div>
+        <Dumbbell className="icon" />
+      </Link>
 
       <section className="dashboard-layout">
         <div className="dashboard-main">

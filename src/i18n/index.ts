@@ -4,6 +4,9 @@ import type { AppLanguage } from '../entities/treatment-profile/types';
 import { legalContentEn } from './content/legal.en';
 import { legalContentEs } from './content/legal.es';
 import { legalContentPt } from './content/legal.pt';
+import { musclePlanContentEn } from './content/muscle-plan.en';
+import { musclePlanContentEs } from './content/muscle-plan.es';
+import { musclePlanContentPt } from './content/muscle-plan.pt';
 import { nutritionContentEn } from './content/nutrition.en';
 import { nutritionContentEs } from './content/nutrition.es';
 import { nutritionContentPt } from './content/nutrition.pt';
@@ -16,7 +19,7 @@ export const supportedLanguages: AppLanguage[] = ['en', 'es', 'pt'];
 const resources = {
   en: {
     translation: {
-      appName: 'GLP-1 Guide',
+      appName: 'Lumea',
       activePlan: 'Active plan',
       nav: {
         home: 'Home',
@@ -31,7 +34,7 @@ const resources = {
         next: 'Next',
         skip: 'Skip',
         finish: "Got it, let's start",
-        welcome: { title: 'Welcome to GLP-1 Guide', titleNamed: 'Welcome, {{name}}!', body: 'A quick tour so you know where everything is. It only takes a moment.' },
+        welcome: { title: 'Welcome to Lumea', titleNamed: 'Welcome, {{name}}!', body: 'A quick tour so you know where everything is. It only takes a moment.' },
         tracking: { title: 'Track your day', body: 'In "Tracking" you log your dose, how you feel, your weight, and your symptoms — once a day.' },
         progress: { title: 'See your progress', body: 'In "Progress" you see your weight, symptoms, and wellbeing trending over time.' },
         nutrition: { title: 'Your nutrition', body: 'In "Nutrition" you get eating guidance built for GLP-1 treatment, plus answers to common questions.' },
@@ -254,6 +257,7 @@ const resources = {
       dashboard: {
         personalizedToday: 'Personalized today',
         greeting: 'Hi, {{name}}',
+        musclePlanEntry: 'Protect your muscle with your GLP-1 training plan.',
         titleKnown: 'Your treatment, organized around what matters now.',
         titleUnknown: 'Finish setup to personalize the dashboard.',
         headline: {
@@ -544,6 +548,7 @@ const resources = {
         content: sideEffectsContentEn,
       },
       nutrition: nutritionContentEn,
+      musclePlan: musclePlanContentEn,
       analytics: {
         kicker: 'Internal',
         title: 'User segmentation',
@@ -570,7 +575,7 @@ const resources = {
   },
   es: {
     translation: {
-      appName: 'GLP-1 Guide',
+      appName: 'Lumea',
       activePlan: 'Plan activo',
       nav: {
         home: 'Inicio',
@@ -585,7 +590,7 @@ const resources = {
         next: 'Siguiente',
         skip: 'Saltar',
         finish: 'Entendido, empezar',
-        welcome: { title: 'Bienvenido a GLP-1 Guide', titleNamed: 'Bienvenido, {{name}}!', body: 'Un recorrido corto para que sepas donde esta cada cosa. Solo toma un momento.' },
+        welcome: { title: 'Bienvenido a Lumea', titleNamed: 'Bienvenido, {{name}}!', body: 'Un recorrido corto para que sepas donde esta cada cosa. Solo toma un momento.' },
         tracking: { title: 'Registra tu dia', body: 'En "Seguimiento" registras tu dosis, como te sientes, tu peso y tus sintomas — una vez al dia.' },
         progress: { title: 'Mira tu progreso', body: 'En "Progreso" ves como evolucionan tu peso, tus sintomas y tu bienestar con el tiempo.' },
         nutrition: { title: 'Tu alimentacion', body: 'En "Nutricion" tienes guia de alimentacion pensada para el tratamiento con GLP-1 y respuestas a dudas comunes.' },
@@ -808,6 +813,7 @@ const resources = {
       dashboard: {
         personalizedToday: 'Personalizado hoy',
         greeting: 'Hola, {{name}}',
+        musclePlanEntry: 'Protege tu músculo con tu plan de entrenamiento GLP-1.',
         titleKnown: 'Tu tratamiento, organizado alrededor de lo que importa ahora.',
         titleUnknown: 'Termina la configuracion para personalizar el dashboard.',
         headline: {
@@ -1099,6 +1105,7 @@ const resources = {
         content: sideEffectsContentEs,
       },
       nutrition: nutritionContentEs,
+      musclePlan: musclePlanContentEs,
       analytics: {
         kicker: 'Interno',
         title: 'Segmentacion de usuarios',
@@ -1125,7 +1132,7 @@ const resources = {
   },
   pt: {
     translation: {
-      appName: 'GLP-1 Guide',
+      appName: 'Lumea',
       activePlan: 'Plano ativo',
       nav: {
         home: 'Início',
@@ -1140,7 +1147,7 @@ const resources = {
         next: 'Proximo',
         skip: 'Pular',
         finish: 'Entendi, comecar',
-        welcome: { title: 'Bem-vindo ao GLP-1 Guide', titleNamed: 'Bem-vindo, {{name}}!', body: 'Um tour rapido para voce saber onde esta cada coisa. Leva so um momento.' },
+        welcome: { title: 'Bem-vindo ao Lumea', titleNamed: 'Bem-vindo, {{name}}!', body: 'Um tour rapido para voce saber onde esta cada coisa. Leva so um momento.' },
         tracking: { title: 'Registre seu dia', body: 'Em "Acompanhamento" voce registra sua dose, como se sente, seu peso e seus sintomas — uma vez por dia.' },
         progress: { title: 'Veja seu progresso', body: 'Em "Progresso" voce ve como evoluem seu peso, seus sintomas e seu bem-estar ao longo do tempo.' },
         nutrition: { title: 'Sua alimentacao', body: 'Em "Nutricao" voce tem orientacao alimentar feita para o tratamento com GLP-1 e respostas a duvidas comuns.' },
@@ -1363,6 +1370,7 @@ const resources = {
       dashboard: {
         personalizedToday: 'Personalizado hoje',
         greeting: 'Ola, {{name}}',
+        musclePlanEntry: 'Proteja seu músculo com seu plano de treino GLP-1.',
         titleKnown: 'Seu tratamento, organizado em torno do que importa agora.',
         titleUnknown: 'Finalize a configuracao para personalizar o dashboard.',
         headline: {
@@ -1654,6 +1662,7 @@ const resources = {
         content: sideEffectsContentPt,
       },
       nutrition: nutritionContentPt,
+      musclePlan: musclePlanContentPt,
       analytics: {
         kicker: 'Interno',
         title: 'Segmentacao de usuarios',

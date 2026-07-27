@@ -1,12 +1,17 @@
 {
-  "name": "GLP-1 Guide",
-  "short_name": "GLP-1 Guide",
+  "name": "Lumea",
+  "short_name": "Lumea",
   "description": "Companion app for people on GLP-1 treatment.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b6ef5",
+  "theme_color": "#00685f",
   "icons": [
+    {
+      "src": "/logo-512.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",

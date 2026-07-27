@@ -7,7 +7,7 @@ export const legalContentEs = {
     sections: [
       {
         h: '1. Naturaleza del servicio',
-        p: 'GLP-1 Guide es una aplicación de acompañamiento y educación para personas en tratamiento con agonistas GLP-1. No es un servicio médico, no reemplaza la consulta con un profesional de la salud y no proporciona diagnóstico ni tratamiento médico.',
+        p: 'Lumea es una aplicación de acompañamiento y educación para personas en tratamiento con agonistas GLP-1. No es un servicio médico, no reemplaza la consulta con un profesional de la salud y no proporciona diagnóstico ni tratamiento médico.',
       },
       {
         h: '2. No es consejo médico',

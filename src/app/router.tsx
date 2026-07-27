@@ -5,6 +5,11 @@ import { DashboardPage } from '../features/dashboard/dashboard-page';
 import { DoseTrackerPage } from '../features/dose-tracker/dose-tracker-page';
 import { LanguageSelectionPage } from '../features/language-selection/language-selection-page';
 import { LegalPage } from '../features/legal/legal-page';
+import { MusclePlanBoot } from '../features/muscle-plan/muscle-plan-boot';
+import { MusclePlanDashboardPage } from '../features/muscle-plan/dashboard/muscle-plan-dashboard';
+import { MusclePlanQuizPage } from '../features/muscle-plan/quiz/muscle-plan-quiz-page';
+import { MusclePlanSessionPage } from '../features/muscle-plan/session/session-page';
+import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
 import { NotificationsPage } from '../features/notifications/notifications-page';
 import { NutritionPage } from '../features/nutrition/nutrition-page';
 import { ProgressPage } from '../features/progress/progress-page';
@@ -21,6 +26,7 @@ import {
     RequireAppAccess,
     RequireAuthPageAccess,
     RequireLanguageSelection,
+    RequireMusclePlanAccess,
     RequirePaidAccess,
     RequireSubscriptionPageAccess,
 } from './access-gates';
@@ -93,6 +99,35 @@ const router = createBrowserRouter([
       { path: 'symptom-monitor/:code', element: <SideEffectDetailPage /> },
       { path: 'reports', element: <MedicalReportPage /> },
       { path: 'notifications', element: <NotificationsPage /> },
+      { path: 'muscle-plan/upgrade', element: <MusclePlanUpgradePage /> },
+      {
+        path: 'muscle-plan/quiz',
+        element: (
+          <RequireMusclePlanAccess>
+            <MusclePlanQuizPage />
+          </RequireMusclePlanAccess>
+        ),
+      },
+      {
+        path: 'muscle-plan/dashboard',
+        element: (
+          <RequireMusclePlanAccess>
+            <MusclePlanBoot requirePlan>
+              <MusclePlanDashboardPage />
+            </MusclePlanBoot>
+          </RequireMusclePlanAccess>
+        ),
+      },
+      {
+        path: 'muscle-plan/session/:dayIndex',
+        element: (
+          <RequireMusclePlanAccess>
+            <MusclePlanBoot requirePlan>
+              <MusclePlanSessionPage />
+            </MusclePlanBoot>
+          </RequireMusclePlanAccess>
+        ),
+      },
       { path: 'settings', element: <SettingsPage /> },
       {
         path: 'insights',
