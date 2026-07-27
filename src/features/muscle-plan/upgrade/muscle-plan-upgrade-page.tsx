@@ -63,7 +63,12 @@ export function MusclePlanUpgradePage() {
             </div>
           </div>
 
-          {error ? <div className="auth-alert">{error}</div> : null}
+          {error ? (
+            <div className="auth-alert">
+              {t('subscribe.checkoutError')}
+              <div style={{ marginTop: 6, fontSize: 12, opacity: 0.85 }}>{error}</div>
+            </div>
+          ) : null}
 
           <button className="cta" type="button" onClick={() => void handleUpgrade()} disabled={loading}>
             {loading ? t('auth.working') : t('musclePlan.upgrade.cta')}

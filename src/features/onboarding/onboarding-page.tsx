@@ -228,7 +228,7 @@ export function OnboardingPage() {
       await saveTreatmentProfile(userId, profile);
       setShowReminders(true);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Unable to save treatment profile.');
+      setSubmitError(t('onboarding.saveError'));
     } finally {
       setSaving(false);
     }

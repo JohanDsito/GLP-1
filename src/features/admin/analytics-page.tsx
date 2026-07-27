@@ -72,8 +72,9 @@ export function AnalyticsPage() {
         }
       })
       .catch((err) => {
+        console.error('[analytics] failed to load segmentation', err);
         if (mounted) {
-          setError(err instanceof Error ? err.message : 'Unable to load analytics.');
+          setError(t('analytics.loadError'));
         }
       })
       .finally(() => {

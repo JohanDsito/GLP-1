@@ -152,9 +152,11 @@ const resources = {
         openCheckout: 'Open Stripe checkout',
         openPortal: 'Open customer portal',
         redirecting: 'Redirecting to Stripe...',
+        checkoutError: 'We could not open checkout. Please try again in a moment.',
       },
       onboarding: {
         welcomeFlow: 'Welcome flow',
+        saveError: 'We could not save your profile. Please try again.',
         heroTitle: 'Build the treatment profile in a few guided steps.',
         heroCopy:
           'This quiz does not classify people into phases. It collects the context needed to personalize the experience.',
@@ -342,6 +344,38 @@ const resources = {
           high: 'High',
           medium: 'Medium',
           low: 'Low',
+        },
+        labels: {
+          stage: {
+            researching: 'Researching',
+            just_started: 'Just started',
+            ongoing: 'Ongoing',
+            paused: 'Paused',
+            stopped: 'Stopped',
+          },
+          medication: {
+            semaglutide: 'Semaglutide',
+            tirzepatide: 'Tirzepatide',
+            liraglutide: 'Liraglutide',
+            other: 'Other',
+            unknown: 'Medication pending',
+          },
+          goal: {
+            avoid_side_effects: 'Avoid side effects',
+            manage_symptoms: 'Manage symptoms',
+            stay_consistent: 'Stay consistent',
+            doctor_report: 'Doctor report',
+          },
+          intent: {
+            preventive: 'Preventive',
+            reactive: 'Reactive',
+          },
+          symptomProfile: {
+            none: 'None',
+            mild: 'Mild',
+            moderate: 'Moderate',
+            high: 'High',
+          },
         },
         quickActions: {
           logDose: 'Track the rhythm of the treatment.',
@@ -551,6 +585,7 @@ const resources = {
       musclePlan: musclePlanContentEn,
       analytics: {
         kicker: 'Internal',
+        loadError: 'Could not load analytics. Please try again.',
         title: 'User segmentation',
         subtitle: 'Aggregated distribution across all users. No individual data is shown.',
         totalUsers: 'Total users with a profile',
@@ -708,9 +743,11 @@ const resources = {
         openCheckout: 'Abrir Stripe checkout',
         openPortal: 'Abrir customer portal',
         redirecting: 'Redirigiendo a Stripe...',
+        checkoutError: 'No pudimos abrir el pago. Inténtalo de nuevo en un momento.',
       },
       onboarding: {
         welcomeFlow: 'Flujo de bienvenida',
+        saveError: 'No pudimos guardar tu perfil. Inténtalo de nuevo.',
         heroTitle: 'Construye el perfil de tratamiento en unos pocos pasos guiados.',
         heroCopy:
           'Este quiz no clasifica a las personas en fases. Recoge el contexto necesario para personalizar la experiencia.',
@@ -898,6 +935,38 @@ const resources = {
           high: 'Alta',
           medium: 'Media',
           low: 'Baja',
+        },
+        labels: {
+          stage: {
+            researching: 'Investigando',
+            just_started: 'Recién iniciado',
+            ongoing: 'En curso',
+            paused: 'En pausa',
+            stopped: 'Detenido',
+          },
+          medication: {
+            semaglutide: 'Semaglutida',
+            tirzepatide: 'Tirzepatida',
+            liraglutide: 'Liraglutida',
+            other: 'Otro',
+            unknown: 'Medicamento pendiente',
+          },
+          goal: {
+            avoid_side_effects: 'Evitar efectos secundarios',
+            manage_symptoms: 'Manejar síntomas',
+            stay_consistent: 'Mantener constancia',
+            doctor_report: 'Informe médico',
+          },
+          intent: {
+            preventive: 'Preventivo',
+            reactive: 'Reactivo',
+          },
+          symptomProfile: {
+            none: 'Ninguno',
+            mild: 'Leve',
+            moderate: 'Moderado',
+            high: 'Alto',
+          },
         },
         quickActions: {
           logDose: 'Sigue el ritmo del tratamiento.',
@@ -1108,6 +1177,7 @@ const resources = {
       musclePlan: musclePlanContentEs,
       analytics: {
         kicker: 'Interno',
+        loadError: 'No se pudo cargar la analítica. Inténtalo de nuevo.',
         title: 'Segmentacion de usuarios',
         subtitle: 'Distribucion agregada de todos los usuarios. No se muestra ningun dato individual.',
         totalUsers: 'Usuarios con perfil',
@@ -1265,9 +1335,11 @@ const resources = {
         openCheckout: 'Abrir checkout do Stripe',
         openPortal: 'Abrir portal do cliente',
         redirecting: 'Redirecionando para o Stripe...',
+        checkoutError: 'Não conseguimos abrir o pagamento. Tente novamente em instantes.',
       },
       onboarding: {
         welcomeFlow: 'Fluxo de boas-vindas',
+        saveError: 'Não conseguimos salvar seu perfil. Tente novamente.',
         heroTitle: 'Monte o perfil de tratamento em alguns passos guiados.',
         heroCopy:
           'Este quiz nao classifica pessoas em fases. Ele coleta o contexto necessario para personalizar a experiencia.',
@@ -1455,6 +1527,38 @@ const resources = {
           high: 'Alta',
           medium: 'Media',
           low: 'Baixa',
+        },
+        labels: {
+          stage: {
+            researching: 'Pesquisando',
+            just_started: 'Recém-comecei',
+            ongoing: 'Em andamento',
+            paused: 'Em pausa',
+            stopped: 'Interrompido',
+          },
+          medication: {
+            semaglutide: 'Semaglutida',
+            tirzepatide: 'Tirzepatida',
+            liraglutide: 'Liraglutida',
+            other: 'Outro',
+            unknown: 'Medicamento pendente',
+          },
+          goal: {
+            avoid_side_effects: 'Evitar efeitos colaterais',
+            manage_symptoms: 'Controlar sintomas',
+            stay_consistent: 'Manter constância',
+            doctor_report: 'Relatório médico',
+          },
+          intent: {
+            preventive: 'Preventivo',
+            reactive: 'Reativo',
+          },
+          symptomProfile: {
+            none: 'Nenhum',
+            mild: 'Leve',
+            moderate: 'Moderado',
+            high: 'Alto',
+          },
         },
         quickActions: {
           logDose: 'Acompanhe o ritmo do tratamento.',
@@ -1665,6 +1769,7 @@ const resources = {
       musclePlan: musclePlanContentPt,
       analytics: {
         kicker: 'Interno',
+        loadError: 'Não foi possível carregar a análise. Tente novamente.',
         title: 'Segmentacao de usuarios',
         subtitle: 'Distribuicao agregada de todos os usuarios. Nenhum dado individual e mostrado.',
         totalUsers: 'Usuarios com perfil',

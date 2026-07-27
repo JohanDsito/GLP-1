@@ -79,7 +79,12 @@ export function SubscriptionPage() {
             {isRedirecting ? t('subscribe.redirecting') : t('subscribe.openCheckout')}
             <ExternalLink className="icon" />
           </button>
-          {error ? <div className="auth-alert">{error}</div> : null}
+          {error ? (
+            <div className="auth-alert">
+              {t('subscribe.checkoutError')}
+              <div style={{ marginTop: 6, fontSize: 12, opacity: 0.85 }}>{error}</div>
+            </div>
+          ) : null}
         </div>
       </section>
     </main>

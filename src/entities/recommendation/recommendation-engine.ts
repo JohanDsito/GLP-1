@@ -59,7 +59,7 @@ export function buildDashboardRecommendations(
 
   if (profile.stage === 'paused' || profile.stage === 'stopped') {
     recommendations.push({
-      id: 'anti-rebound',
+      id: 'antiRebound',
       title: 'Anti-rebound plan',
       copy: 'Rebuild routine and reduce the chance of rebound effects.',
       priority: 'high',
@@ -70,7 +70,7 @@ export function buildDashboardRecommendations(
 
   if (profile.goal === 'doctor_report') {
     recommendations.push({
-      id: 'report',
+      id: 'doctorReport',
       title: 'Doctor-ready report',
       copy: 'Open a structured summary for the next appointment.',
       priority: 'high',

@@ -11,25 +11,6 @@ import { useTreatmentProfileStore } from '../../entities/treatment-profile/treat
 import { getFirstName } from '../../lib/supabase/profile';
 import { fetchActiveSideEffects, fetchRecentSymptomRecords } from '../../lib/supabase/symptoms';
 
-function formatStage(stage: string) {
-  return stage.replaceAll('_', ' ');
-}
-
-function formatMedication(medication: string) {
-  switch (medication) {
-    case 'semaglutide':
-      return 'Semaglutide';
-    case 'tirzepatide':
-      return 'Tirzepatide';
-    case 'liraglutide':
-      return 'Liraglutide';
-    case 'unknown':
-      return 'Medication pending';
-    default:
-      return medication;
-  }
-}
-
 function getPriorityTone(tone: 'primary' | 'accent' | 'soft') {
   if (tone === 'accent') {
     return 'pill accent';
@@ -44,6 +25,8 @@ function getPriorityTone(tone: 'primary' | 'accent' | 'soft') {
 
 export function DashboardPage() {
   const { t } = useTranslation();
+  const medLabel = (m: string) => t('dashboard.labels.medication.' + m, m);
+  const stageLabel = (s: string) => t('dashboard.labels.stage.' + s, s.replaceAll('_', ' '));
   const profile = useTreatmentProfileStore((state) => state.profile);
   const user = useAuthStore((state) => state.user);
   const userId = user?.id ?? null;
@@ -105,9 +88,9 @@ export function DashboardPage() {
               {profile?.intent === 'preventive' ? t('dashboard.preventiveMode') : t('dashboard.activeGuidance')}
             </span>
             <span className="pill accent">
-              {profile ? formatMedication(profile.medication) : t('dashboard.noProfileYet')}
+              {profile ? medLabel(profile.medication) : t('dashboard.noProfileYet')}
             </span>
-            <span className="pill primary">{profile ? formatStage(profile.stage) : t('dashboard.onboardingRequired')}</span>
+            <span className="pill primary">{profile ? stageLabel(profile.stage) : t('dashboard.onboardingRequired')}</span>
           </div>
         </div>
 
@@ -115,17 +98,21 @@ export function DashboardPage() {
           <div className="dashboard-signal">
             <div className="dashboard-signal__label">{t('dashboard.todayFocus')}</div>
             <div className="dashboard-signal__value">
-              {topRecommendation?.title ?? t('dashboard.completeOnboarding')}
+              {topRecommendation
+                ? t(`dashboard.recommendations.${topRecommendation.id}.title`, topRecommendation.title)
+                : t('dashboard.completeOnboarding')}
             </div>
             <div className="dashboard-signal__copy">
-              {topRecommendation?.copy ?? t('dashboard.recommendations.onboarding.copy')}
+              {topRecommendation
+                ? t(`dashboard.recommendations.${topRecommendation.id}.copy`, topRecommendation.copy)
+                : t('dashboard.recommendations.onboarding.copy')}
             </div>
           </div>
 
           <div className="dashboard-mini-grid">
             <div className="dashboard-mini-card">
               <span className="dashboard-mini-label">{t('dashboard.medication')}</span>
-              <strong>{profile ? formatMedication(profile.medication) : t('dashboard.pending')}</strong>
+              <strong>{profile ? medLabel(profile.medication) : t('dashboard.pending')}</strong>
             </div>
             <div className="dashboard-mini-card">
               <span className="dashboard-mini-label">{t('dashboard.language')}</span>
@@ -133,7 +120,7 @@ export function DashboardPage() {
             </div>
             <div className="dashboard-mini-card">
               <span className="dashboard-mini-label">{t('dashboard.symptoms')}</span>
-              <strong>{profile?.symptomProfile ?? t('dashboard.notSet')}</strong>
+              <strong>{profile ? t('dashboard.labels.symptomProfile.' + profile.symptomProfile) : t('dashboard.notSet')}</strong>
             </div>
             <div className="dashboard-mini-card">
               <span className="dashboard-mini-label">{t('dashboard.status')}</span>
@@ -185,7 +172,7 @@ export function DashboardPage() {
                     <div className="list-item-title">{t(`dashboard.recommendations.${item.id}.title`, item.title)}</div>
                     <div className="list-item-copy">{t(`dashboard.recommendations.${item.id}.copy`, item.copy)}</div>
                   </div>
-                  <span className={getPriorityTone(item.tone)}>{item.priority}</span>
+                  <span className={getPriorityTone(item.tone)}>{t('dashboard.priorityLabels.' + item.priority)}</span>
                 </Link>
               ))}
             </div>
@@ -229,15 +216,15 @@ export function DashboardPage() {
             <div className="dashboard-rail-stack">
               <div className="dashboard-rail-row">
                 <span className="dashboard-mini-label">{t('dashboard.stage')}</span>
-                <strong>{profile ? formatStage(profile.stage) : t('dashboard.wait')}</strong>
+                <strong>{profile ? stageLabel(profile.stage) : t('dashboard.wait')}</strong>
               </div>
               <div className="dashboard-rail-row">
                 <span className="dashboard-mini-label">{t('dashboard.goal')}</span>
-                <strong>{profile?.goal ?? t('dashboard.notSet')}</strong>
+                <strong>{profile ? t('dashboard.labels.goal.' + profile.goal) : t('dashboard.notSet')}</strong>
               </div>
               <div className="dashboard-rail-row">
                 <span className="dashboard-mini-label">{t('dashboard.intent')}</span>
-                <strong>{profile?.intent ?? t('dashboard.notSet')}</strong>
+                <strong>{profile ? t('dashboard.labels.intent.' + profile.intent) : t('dashboard.notSet')}</strong>
               </div>
             </div>
           </article>
