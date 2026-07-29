@@ -44,3 +44,11 @@ export async function signOut() {
 
   return supabase.auth.signOut();
 }
+
+export async function updatePassword(newPassword: string) {
+  if (!supabase) {
+    throw new Error('Supabase is not configured.');
+  }
+
+  return supabase.auth.updateUser({ password: newPassword });
+}

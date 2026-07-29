@@ -14,8 +14,8 @@ export const legalContentEs = {
         p: 'Todo el contenido (guías de efectos secundarios, alimentación, dosis de referencia, recordatorios) es informativo y general. Siempre debes consultar a tu médico o profesional de la salud antes de tomar decisiones sobre tu tratamiento, dosis o suplementos.',
       },
       {
-        h: '3. Suscripción y pagos',
-        p: 'El acceso al producto requiere una suscripción de pago procesada por Stripe. La suscripción se renueva de forma periódica hasta que la canceles desde el portal de facturación. Los precios y condiciones pueden cambiar con aviso previo.',
+        h: '3. Pago y acceso',
+        p: 'El acceso al producto requiere un pago único procesado por Stripe, que otorga acceso de por vida a la aplicación. No es una suscripción: no hay cargos recurrentes ni renovaciones automáticas. Los precios pueden cambiar con aviso previo para nuevas compras.',
       },
       {
         h: '4. Cuenta del usuario',
@@ -57,7 +57,7 @@ export const legalContentEs = {
       },
       {
         h: '5. Tus derechos',
-        p: 'Puedes acceder, corregir o solicitar la eliminación de tus datos escribiéndonos al correo de soporte. También puedes cancelar tu suscripción en cualquier momento.',
+        p: 'Puedes acceder, corregir o solicitar la eliminación de tus datos y de tu cuenta en cualquier momento escribiéndonos al correo de soporte. Como el acceso es un pago único, no hay suscripción que cancelar ni cargos recurrentes.',
       },
       {
         h: '6. Notificaciones',

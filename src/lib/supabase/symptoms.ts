@@ -5,6 +5,7 @@ type SymptomRow = {
   id: string;
   code: string;
   category: string;
+  severity: string | null;
   review_status: string;
   severity_scale_min: number;
   severity_scale_max: number;
@@ -22,6 +23,7 @@ function rowToSideEffect(row: SymptomRow): SideEffect {
     id: row.id,
     code: row.code,
     category: row.category as SideEffect['category'],
+    severity: (row.severity as SideEffect['severity']) ?? 'routine',
     reviewStatus: row.review_status as SideEffect['reviewStatus'],
     severityScaleMin: row.severity_scale_min,
     severityScaleMax: row.severity_scale_max,
@@ -36,7 +38,7 @@ export async function fetchActiveSideEffects(): Promise<SideEffect[]> {
 
   const { data, error } = await supabase
     .from('symptoms')
-    .select('id, code, category, review_status, severity_scale_min, severity_scale_max, display_order')
+    .select('id, code, category, severity, review_status, severity_scale_min, severity_scale_max, display_order')
     .eq('active', true)
     .order('display_order', { ascending: true });
 

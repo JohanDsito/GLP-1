@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Mail, ShieldCheck } from 'lucide-react';
 import { BrandMark } from '../../shared/ui/brand-mark';
 import { useTranslation } from 'react-i18next';
 import { signInWithEmail, signUpWithEmail } from '../../lib/supabase/auth';
@@ -24,6 +24,7 @@ export function AuthPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function validateSignUp(): string | null {
     if (!firstName.trim() || !lastName.trim()) {
@@ -174,30 +175,50 @@ export function AuthPage() {
 
           <label className="stack" style={{ gap: 8 }}>
             <span className="onboarding-step">{t('auth.password')}</span>
-            <input
-              className="auth-input"
-              type="password"
-              autoComplete={isSignUp ? 'new-password' : 'current-password'}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder={t('auth.passwordPlaceholder')}
-              required
-              minLength={isSignUp ? MIN_PASSWORD : 6}
-            />
+            <div className="password-field">
+              <input
+                className="auth-input"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder={t('auth.passwordPlaceholder')}
+                required
+                minLength={isSignUp ? MIN_PASSWORD : 6}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+              >
+                {showPassword ? <EyeOff className="icon" /> : <Eye className="icon" />}
+              </button>
+            </div>
           </label>
 
           {isSignUp ? (
             <>
               <label className="stack" style={{ gap: 8 }}>
                 <span className="onboarding-step">{t('auth.confirmPassword')}</span>
-                <input
-                  className="auth-input"
-                  type="password"
-                  autoComplete="new-password"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                  required
-                />
+                <div className="password-field">
+                  <input
+                    className="auth-input"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                  >
+                    {showPassword ? <EyeOff className="icon" /> : <Eye className="icon" />}
+                  </button>
+                </div>
               </label>
 
               <div style={{ display: 'flex', gap: 10 }}>

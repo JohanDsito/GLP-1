@@ -2,17 +2,17 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { AnalyticsPage } from '../features/admin/analytics-page';
 import { AuthPage } from '../features/auth/auth-page';
 import { DashboardPage } from '../features/dashboard/dashboard-page';
-import { DoseTrackerPage } from '../features/dose-tracker/dose-tracker-page';
+import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
+import { FaqPage } from '../features/faq/faq-page';
+import { SeguimientoPage } from '../features/tracking/seguimiento-page';
 import { LanguageSelectionPage } from '../features/language-selection/language-selection-page';
 import { LegalPage } from '../features/legal/legal-page';
 import { MusclePlanBoot } from '../features/muscle-plan/muscle-plan-boot';
 import { MusclePlanDashboardPage } from '../features/muscle-plan/dashboard/muscle-plan-dashboard';
 import { MusclePlanQuizPage } from '../features/muscle-plan/quiz/muscle-plan-quiz-page';
 import { MusclePlanSessionPage } from '../features/muscle-plan/session/session-page';
-import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
 import { NotificationsPage } from '../features/notifications/notifications-page';
 import { NutritionPage } from '../features/nutrition/nutrition-page';
-import { ProgressPage } from '../features/progress/progress-page';
 import { OnboardingPage } from '../features/onboarding/onboarding-page';
 import { MedicalReportPage } from '../features/reports/medical-report-page';
 import { SettingsPage } from '../features/settings/settings-page';
@@ -91,9 +91,12 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'progress', element: <ProgressPage /> },
+      { path: 'seguimiento', element: <SeguimientoPage /> },
       { path: 'nutrition', element: <NutritionPage /> },
-      { path: 'dose-tracker', element: <DoseTrackerPage /> },
+      { path: 'faq', element: <FaqPage /> },
+      // Legacy routes kept as redirects into the merged Seguimiento tabs.
+      { path: 'progress', element: <Navigate to="/seguimiento?view=progress" replace /> },
+      { path: 'dose-tracker', element: <Navigate to="/seguimiento?view=log" replace /> },
       { path: 'symptom-monitor', element: <SymptomMonitorPage /> },
       { path: 'symptom-monitor/request', element: <SideEffectRequestPage /> },
       { path: 'symptom-monitor/:code', element: <SideEffectDetailPage /> },

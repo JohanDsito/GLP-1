@@ -21,7 +21,7 @@ function shortDate(iso: string): string {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
-export function ProgressPage() {
+export function ProgressView() {
   const { t } = useTranslation();
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const profile = useTreatmentProfileStore((state) => state.profile);
@@ -137,11 +137,8 @@ export function ProgressPage() {
   const earnedSet = new Set(earned);
 
   return (
-    <main className="page">
-      <div className="page-head">
-        <div className="page-kicker">{t('progress.kicker')}</div>
-        <h1 className="page-title">{t('progress.title')}</h1>
-        <p className="page-subtitle">{t('progress.subtitle')}</p>
+    <>
+      <div style={{ marginBottom: 12 }}>
         <Link className="subtle-link" to="/reports">
           <FileText className="icon" style={{ display: 'inline-block' }} /> {t('progress.generateReport')}
         </Link>
@@ -242,7 +239,7 @@ export function ProgressPage() {
         {weightPoints.length > 0 ? (
           <TrendChart data={weightPoints} formatValue={(v) => `${v.toFixed(1)} ${unit}`} />
         ) : (
-          <p className="panel-copy">{t('progress.noWeight')} <Link className="subtle-link" to="/dose-tracker">{t('progress.logNow')}</Link></p>
+          <p className="panel-copy">{t('progress.noWeight')} <Link className="subtle-link" to="/seguimiento?view=log">{t('progress.logNow')}</Link></p>
         )}
       </Section>
 
@@ -277,7 +274,7 @@ export function ProgressPage() {
             ) : null}
           </div>
         ) : (
-          <p className="panel-copy">{t('progress.noWellbeing')} <Link className="subtle-link" to="/dose-tracker">{t('progress.logNow')}</Link></p>
+          <p className="panel-copy">{t('progress.noWellbeing')} <Link className="subtle-link" to="/seguimiento?view=log">{t('progress.logNow')}</Link></p>
         )}
       </Section>
 
@@ -297,6 +294,6 @@ export function ProgressPage() {
           <p className="panel-copy">{t('progress.noSymptoms')} <Link className="subtle-link" to="/symptom-monitor">{t('progress.logNow')}</Link></p>
         )}
       </Section>
-    </main>
+    </>
   );
 }

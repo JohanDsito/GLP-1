@@ -1,7 +1,6 @@
-import { Apple, ChevronDown, Dumbbell } from 'lucide-react';
+import { Apple, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Section } from '../../shared/ui/section';
 
 interface NutritionPillar {
@@ -81,22 +80,6 @@ export function NutritionPage() {
         </div>
       </Section>
 
-      <div style={{ height: 16 }} />
-
-      <Section eyebrow={t('musclePlan.title')} title={t('musclePlan.title')}>
-        <div className="panel pad muscle-glp1-card">
-          <div className="panel-header">
-            <div>
-              <div className="pill accent">{t('musclePlan.upgrade.scienceBadge')}</div>
-              <p className="panel-copy" style={{ marginTop: 8 }}>{t('musclePlan.upgrade.scienceCard')}</p>
-            </div>
-            <Dumbbell className="icon" />
-          </div>
-          <Link className="cta" to="/muscle-plan/dashboard">
-            {t('musclePlan.title')}
-          </Link>
-        </div>
-      </Section>
     </main>
   );
 }

@@ -1,23 +1,11 @@
-import { CheckCircle2, CreditCard, ExternalLink, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
+import { CheckCircle2, ExternalLink, Mail, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isStripeConfigured, openCheckout } from '../../lib/stripe';
 import { BrandMark } from '../../shared/ui/brand-mark';
+
+const hotmartUrl = import.meta.env.VITE_HOTMART_CHECKOUT_URL as string | undefined;
 
 export function SubscriptionPage() {
   const { t } = useTranslation();
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleCheckout() {
-    setError(null);
-    setIsRedirecting(true);
-    const result = await openCheckout();
-    if (!result.ok) {
-      setError(result.error);
-      setIsRedirecting(false);
-    }
-  }
 
   return (
     <main className="onboarding-shell">
@@ -38,10 +26,10 @@ export function SubscriptionPage() {
           </div>
           <div className="list-item">
             <div>
-              <div className="list-item-title">{t('subscribe.security')}</div>
-              <div className="list-item-copy">{t('subscribe.securityCopy')}</div>
+              <div className="list-item-title">{t('subscribe.credentials')}</div>
+              <div className="list-item-copy">{t('subscribe.credentialsCopy')}</div>
             </div>
-            <ShieldCheck className="icon" />
+            <Mail className="icon" />
           </div>
         </div>
       </section>
@@ -53,41 +41,31 @@ export function SubscriptionPage() {
             <h2 className="panel-title">{t('subscribe.premiumAccess')}</h2>
             <p className="panel-copy">{t('subscribe.requirement')}</p>
           </div>
-          <CreditCard className="icon" />
+          <ShieldCheck className="icon" />
         </div>
 
         <div className="stack">
           <div className="panel soft pad">
             <div className="metric">
-              <div className="metric-value" style={{ fontSize: 32 }}>
-                {t('subscribe.starterMembership')}
+              <div className="metric-value" style={{ fontSize: 40 }}>
+                {t('subscribe.price')}
               </div>
-              <div className="metric-label">
-                {isStripeConfigured
-                  ? t('subscribe.stripeReady')
-                  : t('subscribe.stripeMissing')}
-              </div>
+              <div className="metric-label">{t('subscribe.priceNote')}</div>
             </div>
           </div>
 
-          <button
-            className="cta"
-            type="button"
-            onClick={() => void handleCheckout()}
-            disabled={!isStripeConfigured || isRedirecting}
-          >
-            {isRedirecting ? t('subscribe.redirecting') : t('subscribe.openCheckout')}
-            <ExternalLink className="icon" />
-          </button>
-          {error ? (
-            <div className="auth-alert">
-              {t('subscribe.checkoutError')}
-              <div style={{ marginTop: 6, fontSize: 12, opacity: 0.85 }}>{error}</div>
-            </div>
-          ) : null}
+          {hotmartUrl ? (
+            <a className="cta" href={hotmartUrl} target="_blank" rel="noreferrer">
+              {t('subscribe.buyOnHotmart')}
+              <ExternalLink className="icon" />
+            </a>
+          ) : (
+            <div className="auth-alert">{t('subscribe.hotmartMissing')}</div>
+          )}
+
+          <p className="panel-copy" style={{ fontSize: 13 }}>{t('subscribe.alreadyBought')}</p>
         </div>
       </section>
     </main>
   );
 }
-

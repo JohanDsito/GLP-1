@@ -57,13 +57,16 @@ Deno.serve(async (request) => {
 
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: 'subscription',
+      // One-time payment for lifetime access (not a recurring subscription).
+      mode: 'payment',
       line_items: [{ price: priceId, quantity: 1 }],
       client_reference_id: user.id,
       customer: existingSubscription?.stripe_customer_id ?? undefined,
       customer_email: existingSubscription?.stripe_customer_id ? undefined : (user.email ?? undefined),
-      subscription_data: {
-        metadata: { user_id: user.id },
+      // The webhook reads this from the completed session to grant access.
+      metadata: { user_id: user.id, product: 'full_access' },
+      payment_intent_data: {
+        metadata: { user_id: user.id, product: 'full_access' },
       },
       success_url: `${appUrl}/?checkout=success`,
       cancel_url: `${appUrl}/subscribe?checkout=cancelled`,

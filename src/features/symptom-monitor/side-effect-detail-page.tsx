@@ -1,4 +1,4 @@
-import { ArrowLeft, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -74,6 +74,16 @@ export function SideEffectDetailPage() {
         <h1 className="page-title">{hasContent ? t(titleKey) : code}</h1>
       </div>
 
+      {sideEffect?.severity === 'emergency' ? (
+        <div className="emergency-banner" style={{ marginBottom: 16 }}>
+          <AlertTriangle className="icon" />
+          <div>
+            <div className="emergency-banner__title">{t('sideEffects.emergencyTitle')}</div>
+            <p className="emergency-banner__copy">{t('sideEffects.emergencyCopy')}</p>
+          </div>
+        </div>
+      ) : null}
+
       <div className="panel soft pad" style={{ marginBottom: 16 }}>
         <div className="panel-header">
           <p className="panel-copy">{t('sideEffects.specialistDisclaimer')}</p>
@@ -107,6 +117,9 @@ export function SideEffectDetailPage() {
             ) : (
               <p className="panel-copy">{t('sideEffects.noSupplements')}</p>
             )}
+            <p className="dashboard-mini-label" style={{ marginTop: 12 }}>
+              {t('sideEffects.supplementsDisclaimer')}
+            </p>
           </Section>
         </>
       ) : (

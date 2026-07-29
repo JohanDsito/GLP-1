@@ -21,23 +21,6 @@ export async function openCheckout(): Promise<CheckoutResult> {
   return { ok: true };
 }
 
-export async function openCustomerPortal(): Promise<CheckoutResult> {
-  if (!supabase) {
-    return { ok: false, error: 'Supabase is not configured.' };
-  }
-
-  const { data, error } = await supabase.functions.invoke<{ url: string }>('create-portal-session', {
-    method: 'POST',
-  });
-
-  if (error || !data?.url) {
-    return { ok: false, error: error?.message ?? 'Unable to open the customer portal.' };
-  }
-
-  window.location.assign(data.url);
-  return { ok: true };
-}
-
 export async function createMusclePlanCheckout(): Promise<CheckoutResult> {
   if (!supabase) {
     return { ok: false, error: 'Supabase is not configured.' };

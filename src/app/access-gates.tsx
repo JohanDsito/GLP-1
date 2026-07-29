@@ -96,6 +96,8 @@ export function RequireMusclePlanAccess({ children }: PropsWithChildren) {
     return <LoadingGate />;
   }
 
+  // The exercise section is a locked add-on: unlocked by a coupon or a separate
+  // purchase. Users without it are sent to the upgrade/unlock screen.
   if (!hasMuscle) {
     return <Navigate to="/muscle-plan/upgrade" replace />;
   }

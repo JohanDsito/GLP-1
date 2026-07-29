@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Apple, Bell, CalendarClock, HeartPulse, LayoutDashboard, LineChart, Settings } from 'lucide-react';
+import { Apple, Bell, Dumbbell, HeartPulse, HelpCircle, LayoutDashboard, LineChart, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../entities/auth/auth-store';
 import { fetchNotifications } from '../../lib/supabase/notifications';
@@ -11,8 +11,8 @@ import { BrandMark } from '../ui/brand-mark';
 
 const navItems = [
   { to: '/dashboard', labelKey: 'nav.home', icon: LayoutDashboard },
-  { to: '/dose-tracker', labelKey: 'nav.doses', icon: CalendarClock },
-  { to: '/progress', labelKey: 'nav.progress', icon: LineChart },
+  { to: '/seguimiento', labelKey: 'nav.tracking', icon: LineChart },
+  { to: '/muscle-plan/dashboard', labelKey: 'nav.exercise', icon: Dumbbell },
   { to: '/nutrition', labelKey: 'nav.nutrition', icon: Apple },
   { to: '/symptom-monitor', labelKey: 'nav.symptoms', icon: HeartPulse },
 ];
@@ -51,6 +51,9 @@ function Topbar() {
         <div className="topbar-pill">
           <span>{t('activePlan')}</span>
         </div>
+        <Link className="topbar-action" to="/faq" aria-label={t('nav.faq')}>
+          <HelpCircle className="icon" />
+        </Link>
         <Link className="topbar-action" to="/notifications" aria-label={t('notifications.title')} style={{ position: 'relative' }}>
           <Bell className="icon" />
           {unreadCount > 0 ? (

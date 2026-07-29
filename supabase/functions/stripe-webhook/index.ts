@@ -43,20 +43,27 @@ Deno.serve(async (request) => {
     return new Response(error instanceof Error ? error.message : 'Invalid signature', { status: 400 });
   }
 
-  // One-time purchases (e.g. the GLP-1 Muscle Plan add-on).
+  // One-time purchases: full app access (lifetime) and the Muscle Plan add-on.
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     const metadataUserId = session.metadata?.user_id ?? session.client_reference_id ?? null;
-    const product = session.metadata?.product ?? null;
+    // Default to full access for legacy sessions that predate the product tag.
+    const product = session.metadata?.product ?? 'full_access';
 
-    if (metadataUserId && product === 'muscle_plan' && session.payment_status === 'paid') {
+    if (metadataUserId && session.payment_status === 'paid') {
       const stripeCustomerId =
         typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null);
 
+      // The Muscle Plan is a separate add-on: only flip its flag, never touch
+      // the main access status. Any other paid product grants lifetime access.
+      const row =
+        product === 'muscle_plan'
+          ? { user_id: metadataUserId, has_muscle_plan: true }
+          : { user_id: metadataUserId, status: 'active', synced_at: new Date().toISOString() };
+
       const { error } = await supabase.from('subscriptions').upsert(
         {
-          user_id: metadataUserId,
-          has_muscle_plan: true,
+          ...row,
           ...(stripeCustomerId ? { stripe_customer_id: stripeCustomerId } : {}),
         },
         { onConflict: 'user_id' },

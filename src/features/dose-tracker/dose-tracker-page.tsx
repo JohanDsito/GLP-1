@@ -1,4 +1,4 @@
-import { CalendarDays, CheckCircle2, LineChart, Moon, Plus, RotateCcw, Scale } from 'lucide-react';
+import { CalendarDays, CheckCircle2, Moon, Plus, RotateCcw, Scale } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ const severityChoices = [
 ];
 const defaultCheckinCodes = ['nausea', 'fatigue', 'constipation', 'headache', 'moodSwings', 'anxiety'];
 
-export function DoseTrackerPage() {
+export function TrackingLogView() {
   const { t } = useTranslation();
   const profile = useTreatmentProfileStore((state) => state.profile);
   const userId = useAuthStore((state) => state.user?.id ?? null);
@@ -223,16 +223,7 @@ export function DoseTrackerPage() {
   const activeSymptomsToday = checkinEffects.filter((e) => (symptomSeverities[e.id] ?? 0) > 0);
 
   return (
-    <main className="page">
-      <div className="page-head">
-        <div className="page-kicker">{t('tracking.kicker')}</div>
-        <h1 className="page-title">{t('tracking.title')}</h1>
-        <p className="page-subtitle">{t('tracking.subtitle')}</p>
-        <Link className="subtle-link" to="/progress">
-          <LineChart className="icon" style={{ display: 'inline-block' }} /> {t('tracking.viewProgress')}
-        </Link>
-      </div>
-
+    <>
       <Section eyebrow={t('doses.currentWeek')} title={t('doses.doseRhythm')}>
         <div className="grid cards">
           <article className="panel pad">
@@ -451,6 +442,6 @@ export function DoseTrackerPage() {
           <p className="panel-copy">{t('tracking.noDosesYet')}</p>
         )}
       </Section>
-    </main>
+    </>
   );
 }

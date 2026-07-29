@@ -1,6 +1,22 @@
 import type { MusclePlan, WorkoutSession } from '../../entities/muscle-plan/types';
 import { supabase } from './client';
 
+export type CouponResult = 'ok' | 'already' | 'invalid' | 'exhausted' | 'unauthorized' | 'error';
+
+/** Redeems a coupon code to unlock the Muscle Plan (exercise section). */
+export async function redeemMusclePlanCoupon(code: string): Promise<CouponResult> {
+  if (!supabase) {
+    return 'error';
+  }
+
+  const { data, error } = await supabase.rpc('redeem_muscle_plan_coupon', { p_code: code });
+  if (error) {
+    return 'error';
+  }
+
+  return ((data as CouponResult) ?? 'error');
+}
+
 type MusclePlanRow = {
   id: string;
   user_id: string;

@@ -1,4 +1,4 @@
-import { BarChart3, Languages, LogOut, RotateCcw, ShieldCheck, UserCog } from 'lucide-react';
+import { BarChart3, KeyRound, Languages, LogOut, RotateCcw, ShieldCheck, UserCog } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,9 +7,8 @@ import { useAuthStore } from '../../entities/auth/auth-store';
 import { useSubscriptionStore } from '../../entities/subscription/subscription-store';
 import { useTreatmentProfileStore } from '../../entities/treatment-profile/treatment-profile-store';
 import { i18n, supportedLanguages } from '../../i18n';
-import { openCustomerPortal } from '../../lib/stripe';
 import { getFirstName } from '../../lib/supabase/profile';
-import { signOut } from '../../lib/supabase/auth';
+import { signOut, updatePassword } from '../../lib/supabase/auth';
 import { saveTreatmentProfile } from '../../lib/supabase/treatment-profile';
 import { ReminderSettings } from './reminder-settings';
 
@@ -24,21 +23,32 @@ export function SettingsPage() {
   const selectedLanguage = useTreatmentProfileStore((state) => state.selectedLanguage);
   const setLanguage = useTreatmentProfileStore((state) => state.setLanguage);
   const resetProfile = useTreatmentProfileStore((state) => state.resetProfile);
-  const [isOpeningPortal, setIsOpeningPortal] = useState(false);
-  const [portalError, setPortalError] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [passwordStatus, setPasswordStatus] = useState<'idle' | 'success' | 'error' | 'short'>('idle');
 
   async function handleSignOut() {
     await signOut();
     navigate('/auth', { replace: true });
   }
 
-  async function handleManageBilling() {
-    setPortalError(null);
-    setIsOpeningPortal(true);
-    const result = await openCustomerPortal();
-    if (!result.ok) {
-      setPortalError(result.error);
-      setIsOpeningPortal(false);
+  async function handleChangePassword() {
+    if (newPassword.trim().length < 8) {
+      setPasswordStatus('short');
+      return;
+    }
+    setSavingPassword(true);
+    setPasswordStatus('idle');
+    try {
+      const { error } = await updatePassword(newPassword);
+      setPasswordStatus(error ? 'error' : 'success');
+      if (!error) {
+        setNewPassword('');
+      }
+    } catch {
+      setPasswordStatus('error');
+    } finally {
+      setSavingPassword(false);
     }
   }
 
@@ -83,23 +93,14 @@ export function SettingsPage() {
             <div className="list-item">
               <div>
                 <div className="list-item-title">{t('settings.subscription')}</div>
-                <div className="list-item-copy">{subscriptionStatus}</div>
+                <div className="list-item-copy">
+                  {subscriptionStatus === 'active' || subscriptionStatus === 'trialing'
+                    ? t('settings.lifetimeActive')
+                    : t('settings.accessInactive')}
+                </div>
               </div>
               <ShieldCheck className="icon" />
             </div>
-            {subscriptionStatus === 'active' || subscriptionStatus === 'trialing' || subscriptionStatus === 'past_due' ? (
-              <div className="stack" style={{ gap: 8 }}>
-                <button
-                  className="cta secondary"
-                  type="button"
-                  onClick={() => void handleManageBilling()}
-                  disabled={isOpeningPortal}
-                >
-                  {isOpeningPortal ? t('settings.openingBilling') : t('settings.manageBilling')}
-                </button>
-                {portalError ? <div className="auth-alert">{portalError}</div> : null}
-              </div>
-            ) : null}
             <div className="list-item">
               <div>
                 <div className="list-item-title">{t('settings.currentLanguage')}</div>
@@ -113,6 +114,40 @@ export function SettingsPage() {
                 {t('settings.viewInsights')}
               </Link>
             ) : null}
+          </div>
+        </article>
+
+        <article className="panel pad">
+          <div className="panel-header">
+            <div>
+              <div className="pill primary">{t('settings.security')}</div>
+              <p className="panel-copy">{t('settings.changePasswordHelp')}</p>
+            </div>
+            <KeyRound className="icon" />
+          </div>
+          <div className="stack" style={{ gap: 8 }}>
+            <label className="stack" style={{ gap: 8 }}>
+              <span className="onboarding-step">{t('settings.newPassword')}</span>
+              <input
+                className="auth-input"
+                type="password"
+                autoComplete="new-password"
+                placeholder={t('settings.newPasswordPlaceholder')}
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+              />
+            </label>
+            {passwordStatus === 'success' ? <div className="auth-alert">{t('settings.passwordUpdated')}</div> : null}
+            {passwordStatus === 'error' ? <div className="auth-alert">{t('settings.passwordError')}</div> : null}
+            {passwordStatus === 'short' ? <div className="auth-alert">{t('settings.passwordTooShort')}</div> : null}
+            <button
+              className="cta secondary"
+              type="button"
+              disabled={savingPassword || !newPassword.trim()}
+              onClick={() => void handleChangePassword()}
+            >
+              {savingPassword ? t('auth.working') : t('settings.changePassword')}
+            </button>
           </div>
         </article>
 

@@ -1,4 +1,4 @@
-import { Apple, Bell, CalendarClock, HeartPulse, LineChart, Sparkles } from 'lucide-react';
+import { Apple, Bell, HeartPulse, HelpCircle, LineChart, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../entities/auth/auth-store';
@@ -8,10 +8,10 @@ const TOUR_KEY = 'glp1-tour-done';
 
 const steps = [
   { icon: Sparkles, titleKey: 'tour.welcome.title', bodyKey: 'tour.welcome.body' },
-  { icon: CalendarClock, titleKey: 'tour.tracking.title', bodyKey: 'tour.tracking.body' },
-  { icon: LineChart, titleKey: 'tour.progress.title', bodyKey: 'tour.progress.body' },
+  { icon: LineChart, titleKey: 'tour.tracking.title', bodyKey: 'tour.tracking.body' },
   { icon: Apple, titleKey: 'tour.nutrition.title', bodyKey: 'tour.nutrition.body' },
   { icon: HeartPulse, titleKey: 'tour.symptoms.title', bodyKey: 'tour.symptoms.body' },
+  { icon: HelpCircle, titleKey: 'tour.faq.title', bodyKey: 'tour.faq.body' },
   { icon: Bell, titleKey: 'tour.reminders.title', bodyKey: 'tour.reminders.body' },
 ] as const;
 

@@ -1,9 +1,19 @@
-import type { ReviewStatus, SideEffectCategory } from '../treatment-profile/types';
+import type { ReviewStatus, SideEffectCategory, SideEffectSeverity } from '../treatment-profile/types';
+
+/** Display order of the library categories. */
+export const sideEffectCategories: SideEffectCategory[] = [
+  'gastrointestinal',
+  'systemic',
+  'genitourinary',
+  'serious',
+  'psychological',
+];
 
 export interface SideEffect {
   id: string;
   code: string;
   category: SideEffectCategory;
+  severity: SideEffectSeverity;
   reviewStatus: ReviewStatus;
   severityScaleMin: number;
   severityScaleMax: number;
@@ -11,14 +21,21 @@ export interface SideEffect {
 }
 
 export function groupByCategory(sideEffects: SideEffect[]): Record<SideEffectCategory, SideEffect[]> {
-  const grouped: Record<SideEffectCategory, SideEffect[]> = { physical: [], psychological: [] };
+  const grouped: Record<SideEffectCategory, SideEffect[]> = {
+    gastrointestinal: [],
+    systemic: [],
+    genitourinary: [],
+    serious: [],
+    psychological: [],
+  };
 
   for (const sideEffect of sideEffects) {
-    grouped[sideEffect.category].push(sideEffect);
+    (grouped[sideEffect.category] ?? grouped.gastrointestinal).push(sideEffect);
   }
 
-  grouped.physical.sort((a, b) => a.displayOrder - b.displayOrder);
-  grouped.psychological.sort((a, b) => a.displayOrder - b.displayOrder);
+  for (const category of sideEffectCategories) {
+    grouped[category].sort((a, b) => a.displayOrder - b.displayOrder);
+  }
 
   return grouped;
 }

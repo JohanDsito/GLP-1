@@ -14,8 +14,8 @@ export const legalContentPt = {
         p: 'Todo o conteúdo (guias de efeitos colaterais, alimentação, doses de referência, lembretes) é informativo e geral. Consulte sempre seu médico ou profissional de saúde antes de tomar decisões sobre seu tratamento, dose ou suplementos.',
       },
       {
-        h: '3. Assinatura e pagamentos',
-        p: 'O acesso requer uma assinatura paga processada pelo Stripe. A assinatura é renovada periodicamente até que você a cancele no portal de cobrança. Preços e condições podem mudar com aviso prévio.',
+        h: '3. Pagamento e acesso',
+        p: 'O acesso requer um pagamento único processado pelo Stripe, que concede acesso vitalício ao app. Não é uma assinatura: não há cobranças recorrentes nem renovações automáticas. Os preços podem mudar com aviso prévio para novas compras.',
       },
       {
         h: '4. Sua conta',
@@ -57,7 +57,7 @@ export const legalContentPt = {
       },
       {
         h: '5. Seus direitos',
-        p: 'Você pode acessar, corrigir ou solicitar a exclusão dos seus dados escrevendo para nosso e-mail de suporte. Você também pode cancelar sua assinatura a qualquer momento.',
+        p: 'Você pode acessar, corrigir ou solicitar a exclusão dos seus dados e da sua conta a qualquer momento escrevendo para nosso e-mail de suporte. Como o acesso é um pagamento único, não há assinatura para cancelar nem cobranças recorrentes.',
       },
       {
         h: '6. Notificações',

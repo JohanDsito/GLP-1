@@ -1,8 +1,8 @@
-import { AlertTriangle, CircleAlert, MessageCircleQuestion, Pill } from 'lucide-react';
+import { AlertTriangle, ChevronRight, MessageCircleQuestion } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { groupByCategory, type SideEffect } from '../../entities/side-effects/types';
+import { groupByCategory, sideEffectCategories, type SideEffect } from '../../entities/side-effects/types';
 import type { SideEffectCategory } from '../../entities/treatment-profile/types';
 import { fetchActiveSideEffects } from '../../lib/supabase/symptoms';
 import { Section } from '../../shared/ui/section';
@@ -10,7 +10,7 @@ import { Section } from '../../shared/ui/section';
 export function SymptomMonitorPage() {
   const { t } = useTranslation();
   const [sideEffects, setSideEffects] = useState<SideEffect[]>([]);
-  const [activeTab, setActiveTab] = useState<SideEffectCategory>('physical');
+  const [activeCat, setActiveCat] = useState<SideEffectCategory>('gastrointestinal');
 
   useEffect(() => {
     let mounted = true;
@@ -29,7 +29,7 @@ export function SymptomMonitorPage() {
   }, []);
 
   const grouped = groupByCategory(sideEffects);
-  const visibleEffects = grouped[activeTab];
+  const visibleEffects = grouped[activeCat];
 
   return (
     <main className="page">
@@ -39,50 +39,50 @@ export function SymptomMonitorPage() {
         <p className="page-subtitle">{t('sideEffects.browseSubtitle')}</p>
       </div>
 
-      <div className="dashboard-pills" style={{ marginBottom: 16 }}>
-        <button
-          type="button"
-          className={activeTab === 'physical' ? 'choice-chip selected' : 'choice-chip'}
-          onClick={() => setActiveTab('physical')}
-        >
-          {t('sideEffects.physicalTab')}
-        </button>
-        <button
-          type="button"
-          className={activeTab === 'psychological' ? 'choice-chip selected' : 'choice-chip'}
-          onClick={() => setActiveTab('psychological')}
-        >
-          {t('sideEffects.psychologicalTab')}
-        </button>
+      <div className="choice-chip-row" style={{ flexWrap: 'wrap', marginBottom: 16 }}>
+        {sideEffectCategories.map((cat) => (
+          <button
+            key={cat}
+            type="button"
+            className={activeCat === cat ? 'choice-chip selected' : 'choice-chip'}
+            onClick={() => setActiveCat(cat)}
+          >
+            {t(`sideEffects.categories.${cat}`)}
+          </button>
+        ))}
       </div>
 
-      <Section eyebrow={t('sideEffects.title')} title={t(`sideEffects.${activeTab}Tab`)}>
+      <Section eyebrow={t('sideEffects.title')} title={t(`sideEffects.categories.${activeCat}`)}>
         <div className="list">
           {visibleEffects.map((effect) => {
             const contentTitle = t(`sideEffects.content.${effect.code}.title`, effect.code);
             const hasContent = i18nHasContent(t, effect.code);
+            const isEmergency = effect.severity === 'emergency';
 
             const inner = (
               <>
                 <div>
-                  {effect.reviewStatus !== 'reviewed' ? (
-                    <div className="pill soft" style={{ marginBottom: 8 }}>
-                      {t('sideEffects.draftBadge')}
+                  {isEmergency ? (
+                    <div className="pill danger" style={{ marginBottom: 8 }}>
+                      <AlertTriangle className="icon" />
+                      {t('sideEffects.emergencyBadge')}
                     </div>
                   ) : null}
                   <div className="list-item-title">{contentTitle}</div>
                   {!hasContent ? <div className="list-item-copy">{t('sideEffects.contentMissing')}</div> : null}
                 </div>
-                {activeTab === 'physical' ? <Pill className="icon" /> : <CircleAlert className="icon" />}
+                <ChevronRight className="icon" />
               </>
             );
 
+            const className = `list-item${isEmergency ? ' list-item--emergency' : ''}`;
+
             return hasContent ? (
-              <Link className="list-item" key={effect.id} to={`/symptom-monitor/${effect.code}`}>
+              <Link className={className} key={effect.id} to={`/symptom-monitor/${effect.code}`}>
                 {inner}
               </Link>
             ) : (
-              <div className="list-item" key={effect.id}>
+              <div className={className} key={effect.id}>
                 {inner}
               </div>
             );

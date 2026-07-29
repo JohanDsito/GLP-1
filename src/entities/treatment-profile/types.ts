@@ -15,7 +15,14 @@ export type TreatmentGoal = 'avoid_side_effects' | 'manage_symptoms' | 'stay_con
 
 export type AppLanguage = 'en' | 'es' | 'pt';
 
-export type SideEffectCategory = 'physical' | 'psychological';
+export type SideEffectCategory =
+  | 'gastrointestinal'
+  | 'systemic'
+  | 'genitourinary'
+  | 'serious'
+  | 'psychological';
+
+export type SideEffectSeverity = 'routine' | 'emergency';
 
 export type ReviewStatus = 'draft' | 'reviewed';
 

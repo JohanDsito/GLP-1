@@ -14,8 +14,8 @@ export const legalContentEn = {
         p: 'All content (side-effect guides, nutrition, reference doses, reminders) is informational and general. Always consult your doctor or healthcare professional before making decisions about your treatment, dose, or supplements.',
       },
       {
-        h: '3. Subscription and payments',
-        p: 'Access requires a paid subscription processed by Stripe. The subscription renews periodically until you cancel it from the billing portal. Prices and terms may change with prior notice.',
+        h: '3. Payment and access',
+        p: 'Access requires a one-time payment processed by Stripe, which grants lifetime access to the app. It is not a subscription: there are no recurring charges and no automatic renewals. Prices may change with prior notice for new purchases.',
       },
       {
         h: '4. Your account',
@@ -57,7 +57,7 @@ export const legalContentEn = {
       },
       {
         h: '5. Your rights',
-        p: 'You can access, correct, or request deletion of your data by contacting our support email. You can also cancel your subscription at any time.',
+        p: 'You can access, correct, or request deletion of your data and account at any time by contacting our support email. Since access is a one-time purchase, there is no subscription to cancel and no recurring charges.',
       },
       {
         h: '6. Notifications',
