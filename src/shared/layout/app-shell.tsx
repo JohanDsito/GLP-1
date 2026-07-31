@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Apple, Bell, Dumbbell, HeartPulse, HelpCircle, LayoutDashboard, LineChart, Settings } from 'lucide-react';
+import { Apple, Bell, Dumbbell, HeartPulse, LayoutDashboard, LineChart, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../entities/auth/auth-store';
 import { fetchNotifications } from '../../lib/supabase/notifications';
@@ -51,9 +51,6 @@ function Topbar() {
         <div className="topbar-pill">
           <span>{t('activePlan')}</span>
         </div>
-        <Link className="topbar-action" to="/faq" aria-label={t('nav.faq')}>
-          <HelpCircle className="icon" />
-        </Link>
         <Link className="topbar-action" to="/notifications" aria-label={t('notifications.title')} style={{ position: 'relative' }}>
           <Bell className="icon" />
           {unreadCount > 0 ? (

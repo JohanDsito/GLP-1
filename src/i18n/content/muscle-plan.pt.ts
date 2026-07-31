@@ -173,7 +173,7 @@ export const musclePlanContentPt = {
     feature3: 'Treinos para qualquer equipamento — do sem equipamento à academia completa',
     feature4: 'Metas de proteína ligadas ao seu peso',
     feature5: 'Acompanhamento de progresso e sequências semanais',
-    price: '$9.99 pagamento único',
+    price: '$5.00 pagamento único',
     priceNote: 'Complemento de pagamento único para usuários do Lumea',
     cta: 'Obter meu plano muscular',
     smallPrint: 'Seção exclusiva. Desbloqueie com um cupom ou comprando separadamente.',

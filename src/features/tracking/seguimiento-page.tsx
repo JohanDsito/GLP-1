@@ -25,12 +25,12 @@ export function SeguimientoPage() {
         <p className="page-subtitle">{view === 'log' ? t('tracking.subtitle') : t('progress.subtitle')}</p>
       </div>
 
-      <div className="choice-chip-row" role="tablist" style={{ marginBottom: 16 }}>
+      <div className="section-tabs" role="tablist" style={{ marginBottom: 16 }}>
         <button
           type="button"
           role="tab"
           aria-selected={view === 'log'}
-          className={view === 'log' ? 'choice-chip selected' : 'choice-chip'}
+          className={view === 'log' ? 'active' : undefined}
           onClick={() => setView('log')}
         >
           {t('tracking.tabLog')}
@@ -39,7 +39,7 @@ export function SeguimientoPage() {
           type="button"
           role="tab"
           aria-selected={view === 'progress'}
-          className={view === 'progress' ? 'choice-chip selected' : 'choice-chip'}
+          className={view === 'progress' ? 'active' : undefined}
           onClick={() => setView('progress')}
         >
           {t('tracking.tabProgress')}

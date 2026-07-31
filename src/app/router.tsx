@@ -3,7 +3,6 @@ import { AnalyticsPage } from '../features/admin/analytics-page';
 import { AuthPage } from '../features/auth/auth-page';
 import { DashboardPage } from '../features/dashboard/dashboard-page';
 import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
-import { FaqPage } from '../features/faq/faq-page';
 import { SeguimientoPage } from '../features/tracking/seguimiento-page';
 import { LanguageSelectionPage } from '../features/language-selection/language-selection-page';
 import { LegalPage } from '../features/legal/legal-page';
@@ -93,7 +92,7 @@ const router = createBrowserRouter([
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'seguimiento', element: <SeguimientoPage /> },
       { path: 'nutrition', element: <NutritionPage /> },
-      { path: 'faq', element: <FaqPage /> },
+      { path: 'faq', element: <Navigate to="/symptom-monitor?view=faq" replace /> },
       // Legacy routes kept as redirects into the merged Seguimiento tabs.
       { path: 'progress', element: <Navigate to="/seguimiento?view=progress" replace /> },
       { path: 'dose-tracker', element: <Navigate to="/seguimiento?view=log" replace /> },

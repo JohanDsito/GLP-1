@@ -173,7 +173,7 @@ export const musclePlanContentEn = {
     feature3: 'Workouts for any equipment — from no gear to full gym',
     feature4: 'Protein targets tied to your weight',
     feature5: 'Progress tracking and weekly streaks',
-    price: '$9.99 one-time',
+    price: '$5.00 one-time',
     priceNote: 'One-time add-on for Lumea members',
     cta: 'Get my muscle plan',
     smallPrint: 'Exclusive section. Unlock it with a coupon or by buying it separately.',
