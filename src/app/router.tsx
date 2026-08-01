@@ -1,6 +1,7 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AnalyticsPage } from '../features/admin/analytics-page';
 import { AuthPage } from '../features/auth/auth-page';
+import { ResetPasswordPage } from '../features/auth/reset-password-page';
 import { DashboardPage } from '../features/dashboard/dashboard-page';
 import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
 import { SeguimientoPage } from '../features/tracking/seguimiento-page';
@@ -17,7 +18,6 @@ import { MedicalReportPage } from '../features/reports/medical-report-page';
 import { SettingsPage } from '../features/settings/settings-page';
 import { SideEffectDetailPage } from '../features/symptom-monitor/side-effect-detail-page';
 import { SideEffectRequestPage } from '../features/symptom-monitor/side-effect-request-page';
-import { SubscriptionPage } from '../features/subscription/subscription-page';
 import { SymptomMonitorPage } from '../features/symptom-monitor/symptom-monitor-page';
 import { AppShell } from '../shared/layout/app-shell';
 import {
@@ -27,7 +27,6 @@ import {
     RequireLanguageSelection,
     RequireMusclePlanAccess,
     RequirePaidAccess,
-    RequireSubscriptionPageAccess,
 } from './access-gates';
 import { RootRoute } from './root-route';
 
@@ -49,6 +48,10 @@ const router = createBrowserRouter([
     element: <LegalPage doc="privacy" />,
   },
   {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
+  },
+  {
     path: '/auth',
     element: (
       <RequireLanguageSelection>
@@ -60,13 +63,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/subscribe',
-    element: (
-      <RequireLanguageSelection>
-        <RequireSubscriptionPageAccess>
-          <SubscriptionPage />
-        </RequireSubscriptionPageAccess>
-      </RequireLanguageSelection>
-    ),
+    element: <Navigate to="/" replace />,
   },
   {
     path: '/onboarding',

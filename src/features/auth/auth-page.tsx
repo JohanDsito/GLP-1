@@ -1,17 +1,19 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn, Mail, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, Eye, EyeOff, LogIn, Mail, ShieldCheck } from 'lucide-react';
 import { BrandMark } from '../../shared/ui/brand-mark';
 import { useTranslation } from 'react-i18next';
-import { signInWithEmail, signUpWithEmail } from '../../lib/supabase/auth';
+import { sendPasswordReset, signInWithEmail, signUpWithEmail } from '../../lib/supabase/auth';
 import { isSupabaseConfigured } from '../../lib/supabase/client';
 
 const MIN_PASSWORD = 8;
 
+type Mode = 'sign-in' | 'sign-up' | 'reset';
+
 export function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<'sign-in' | 'sign-up'>('sign-in');
+  const [mode, setMode] = useState<Mode>('sign-in');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,8 +25,18 @@ export function AuthPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const isSignUp = mode === 'sign-up';
+  const isReset = mode === 'reset';
+
+  function switchMode(next: Mode) {
+    setMode(next);
+    setError(null);
+    setNotice(null);
+  }
 
   function validateSignUp(): string | null {
     if (!firstName.trim() || !lastName.trim()) {
@@ -51,8 +63,29 @@ export function AuthPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setNotice(null);
 
-    if (mode === 'sign-up') {
+    // Password reset request: just send the email.
+    if (isReset) {
+      if (!email.trim()) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const { error: resetError } = await sendPasswordReset(email.trim());
+        if (resetError) {
+          throw resetError;
+        }
+        setNotice(t('auth.resetSent'));
+      } catch (resetError) {
+        setError(resetError instanceof Error ? resetError.message : t('auth.unableToAuthenticate'));
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    if (isSignUp) {
       const validationError = validateSignUp();
       if (validationError) {
         setError(validationError);
@@ -79,7 +112,8 @@ export function AuthPage() {
       }
 
       if (mode === 'sign-up' && !result.data.session) {
-        setError(t('auth.confirmEmail'));
+        // Account created but email confirmation is required — friendly notice.
+        setNotice(t('auth.confirmEmail'));
         return;
       }
 
@@ -91,7 +125,13 @@ export function AuthPage() {
     }
   }
 
-  const isSignUp = mode === 'sign-up';
+  const panelTitle = isReset ? t('auth.resetTitle') : isSignUp ? t('auth.createAccount') : t('auth.signIn');
+  const panelCopy = isReset ? t('auth.resetCopy') : t('auth.useBackend');
+  const submitLabel = isReset
+    ? t('auth.sendResetLink')
+    : isSignUp
+      ? t('auth.createAccountAction')
+      : t('auth.signInAction');
 
   return (
     <main className="onboarding-shell">
@@ -126,8 +166,8 @@ export function AuthPage() {
         <div className="panel-header">
           <div>
             <div className="page-kicker">{t('auth.access')}</div>
-            <h2 className="panel-title">{isSignUp ? t('auth.createAccount') : t('auth.signIn')}</h2>
-            <p className="panel-copy">{t('auth.useBackend')}</p>
+            <h2 className="panel-title">{panelTitle}</h2>
+            <p className="panel-copy">{panelCopy}</p>
           </div>
           <LogIn className="icon" />
         </div>
@@ -173,29 +213,31 @@ export function AuthPage() {
             />
           </label>
 
-          <label className="stack" style={{ gap: 8 }}>
-            <span className="onboarding-step">{t('auth.password')}</span>
-            <div className="password-field">
-              <input
-                className="auth-input"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete={isSignUp ? 'new-password' : 'current-password'}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder={t('auth.passwordPlaceholder')}
-                required
-                minLength={isSignUp ? MIN_PASSWORD : 6}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
-              >
-                {showPassword ? <EyeOff className="icon" /> : <Eye className="icon" />}
-              </button>
-            </div>
-          </label>
+          {!isReset ? (
+            <label className="stack" style={{ gap: 8 }}>
+              <span className="onboarding-step">{t('auth.password')}</span>
+              <div className="password-field">
+                <input
+                  className="auth-input"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder={t('auth.passwordPlaceholder')}
+                  required
+                  minLength={isSignUp ? MIN_PASSWORD : 6}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                >
+                  {showPassword ? <EyeOff className="icon" /> : <Eye className="icon" />}
+                </button>
+              </div>
+            </label>
+          ) : null}
 
           {isSignUp ? (
             <>
@@ -263,16 +305,34 @@ export function AuthPage() {
             </>
           ) : null}
 
+          {notice ? (
+            <div className="auth-success">
+              <CheckCircle2 className="icon" />
+              <span>{notice}</span>
+            </div>
+          ) : null}
           {error ? <div className="auth-alert">{error}</div> : null}
 
           <button className="cta" type="submit" disabled={loading}>
-            {loading ? t('auth.working') : isSignUp ? t('auth.createAccountAction') : t('auth.signInAction')}
+            {loading ? t('auth.working') : submitLabel}
           </button>
+
+          {mode === 'sign-in' ? (
+            <button type="button" className="subtle-link" style={{ alignSelf: 'center' }} onClick={() => switchMode('reset')}>
+              {t('auth.forgotPassword')}
+            </button>
+          ) : null}
         </form>
 
-        <button className="cta secondary" type="button" onClick={() => setMode(isSignUp ? 'sign-in' : 'sign-up')}>
-          {isSignUp ? t('auth.haveAccount') : t('auth.needAccount')}
-        </button>
+        {isReset ? (
+          <button className="cta secondary" type="button" onClick={() => switchMode('sign-in')}>
+            {t('auth.backToSignIn')}
+          </button>
+        ) : (
+          <button className="cta secondary" type="button" onClick={() => switchMode(isSignUp ? 'sign-in' : 'sign-up')}>
+            {isSignUp ? t('auth.haveAccount') : t('auth.needAccount')}
+          </button>
+        )}
       </section>
     </main>
   );

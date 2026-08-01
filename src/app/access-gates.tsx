@@ -15,21 +15,18 @@ function LoadingGate() {
   );
 }
 
+// Payment and access are handled upstream (Hotmart / MemberApp), so the app
+// itself no longer gates on a subscription — any signed-in user has access.
 export function RequirePaidAccess({ children }: PropsWithChildren) {
   const authStatus = useAuthStore((state) => state.status);
-  const subscriptionStatus = useSubscriptionStore((state) => state.status);
   const hasHydrated = useTreatmentProfileStore((state) => state.hasHydrated);
 
-  if (authStatus === 'loading' || subscriptionStatus === 'loading' || !hasHydrated) {
+  if (authStatus === 'loading' || !hasHydrated) {
     return <LoadingGate />;
   }
 
   if (authStatus !== 'authenticated') {
     return <Navigate to="/auth" replace />;
-  }
-
-  if (subscriptionStatus !== 'active' && subscriptionStatus !== 'trialing') {
-    return <Navigate to="/subscribe" replace />;
   }
 
   return children;
@@ -37,36 +34,12 @@ export function RequirePaidAccess({ children }: PropsWithChildren) {
 
 export function RequireAuthPageAccess({ children }: PropsWithChildren) {
   const authStatus = useAuthStore((state) => state.status);
-  const subscriptionStatus = useSubscriptionStore((state) => state.status);
 
-  if (authStatus === 'loading' || subscriptionStatus === 'loading') {
+  if (authStatus === 'loading') {
     return <LoadingGate />;
   }
 
-  if (authStatus === 'authenticated' && (subscriptionStatus === 'active' || subscriptionStatus === 'trialing')) {
-    return <Navigate to="/" replace />;
-  }
-
-  if (authStatus === 'authenticated' && subscriptionStatus !== 'active' && subscriptionStatus !== 'trialing') {
-    return <Navigate to="/subscribe" replace />;
-  }
-
-  return children;
-}
-
-export function RequireSubscriptionPageAccess({ children }: PropsWithChildren) {
-  const authStatus = useAuthStore((state) => state.status);
-  const subscriptionStatus = useSubscriptionStore((state) => state.status);
-
-  if (authStatus === 'loading' || subscriptionStatus === 'loading') {
-    return <LoadingGate />;
-  }
-
-  if (authStatus !== 'authenticated') {
-    return <Navigate to="/auth" replace />;
-  }
-
-  if (subscriptionStatus === 'active' || subscriptionStatus === 'trialing') {
+  if (authStatus === 'authenticated') {
     return <Navigate to="/" replace />;
   }
 
