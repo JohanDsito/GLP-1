@@ -1,6 +1,7 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AnalyticsPage } from '../features/admin/analytics-page';
 import { AuthPage } from '../features/auth/auth-page';
+import { NoAccessPage } from '../features/auth/no-access-page';
 import { ResetPasswordPage } from '../features/auth/reset-password-page';
 import { DashboardPage } from '../features/dashboard/dashboard-page';
 import { MusclePlanUpgradePage } from '../features/muscle-plan/upgrade/muscle-plan-upgrade-page';
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
   {
     path: '/subscribe',
     element: <Navigate to="/" replace />,
+  },
+  {
+    path: '/no-access',
+    element: (
+      <RequireLanguageSelection>
+        <NoAccessPage />
+      </RequireLanguageSelection>
+    ),
   },
   {
     path: '/onboarding',

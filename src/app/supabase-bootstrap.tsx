@@ -4,6 +4,7 @@ import { useAuthStore } from '../entities/auth/auth-store';
 import { useSubscriptionStore } from '../entities/subscription/subscription-store';
 import { useTreatmentProfileStore } from '../entities/treatment-profile/treatment-profile-store';
 import { supabase } from '../lib/supabase/client';
+import { fetchHasAppAccess } from '../lib/supabase/access';
 import { fetchIsAdmin, syncProfileFromUser } from '../lib/supabase/profile';
 import { fetchHasMusclePlan, fetchSubscriptionStatus } from '../lib/supabase/subscription';
 import { fetchTreatmentProfile } from '../lib/supabase/treatment-profile';
@@ -24,6 +25,7 @@ export function SupabaseBootstrap() {
   const setSession = useAuthStore((state) => state.setSession);
   const setSubscriptionStatus = useSubscriptionStore((state) => state.setStatus);
   const setHasMuscle = useSubscriptionStore((state) => state.setHasMuscle);
+  const setAccessStatus = useSubscriptionStore((state) => state.setAccessStatus);
   const setAdminStatus = useAdminStore((state) => state.setStatus);
   const hasHydrated = useTreatmentProfileStore((state) => state.hasHydrated);
   const resetProfile = useTreatmentProfileStore((state) => state.resetProfile);
@@ -33,6 +35,7 @@ export function SupabaseBootstrap() {
     if (!supabase) {
       setSession(null);
       setSubscriptionStatus('inactive');
+      setAccessStatus('denied');
       setAdminStatus('not_admin');
       return;
     }
@@ -47,24 +50,28 @@ export function SupabaseBootstrap() {
       if (!userId) {
         setSubscriptionStatus('inactive');
         setHasMuscle(false);
+        setAccessStatus('denied');
         setAdminStatus('not_admin');
         return;
       }
 
       setSubscriptionStatus('loading');
+      setAccessStatus('loading');
       setAdminStatus('loading');
 
       try {
-        const [status, profile, isAdmin, hasMuscle] = await Promise.all([
+        const [status, profile, isAdmin, hasMuscle, hasAccess] = await Promise.all([
           fetchSubscriptionStatus(userId),
           fetchTreatmentProfile(userId),
           fetchIsAdmin(userId),
           fetchHasMusclePlan(userId),
+          fetchHasAppAccess(),
         ]);
 
         if (mounted && requestId === nextRequestId) {
           setSubscriptionStatus(status);
           setHasMuscle(hasMuscle);
+          setAccessStatus(hasAccess ? 'granted' : 'denied');
           setAdminStatus(isAdmin ? 'admin' : 'not_admin');
           if (profile) {
             setProfile(profile, userId);
@@ -78,6 +85,7 @@ export function SupabaseBootstrap() {
       } catch {
         if (mounted && requestId === nextRequestId) {
           setSubscriptionStatus('inactive');
+          setAccessStatus('denied');
           setAdminStatus('not_admin');
         }
       }

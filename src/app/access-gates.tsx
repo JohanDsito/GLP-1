@@ -15,18 +15,23 @@ function LoadingGate() {
   );
 }
 
-// Payment and access are handled upstream (Hotmart / MemberApp), so the app
-// itself no longer gates on a subscription — any signed-in user has access.
+// Access is granted only to emails that bought on Hotmart (or admins). Payment
+// happens on Hotmart; the app just checks the buyer's email against the allowlist.
 export function RequirePaidAccess({ children }: PropsWithChildren) {
   const authStatus = useAuthStore((state) => state.status);
+  const accessStatus = useSubscriptionStore((state) => state.accessStatus);
   const hasHydrated = useTreatmentProfileStore((state) => state.hasHydrated);
 
-  if (authStatus === 'loading' || !hasHydrated) {
+  if (authStatus === 'loading' || accessStatus === 'loading' || !hasHydrated) {
     return <LoadingGate />;
   }
 
   if (authStatus !== 'authenticated') {
     return <Navigate to="/auth" replace />;
+  }
+
+  if (accessStatus !== 'granted') {
+    return <Navigate to="/no-access" replace />;
   }
 
   return children;
